@@ -121,7 +121,7 @@ export const TRAIL_POIS = [
     hasToilets: true,
     hasRepair: true,
     hasParking: true,
-    coordinates: [46.9928, -72.0002],
+    coordinates: [46.989283, -72.179923],
     description: 'Point de départ au nord. Eau potable à la gare, toilettes, stationnement et point de débarquement VIA Rail.'
   },
   {
@@ -133,7 +133,7 @@ export const TRAIL_POIS = [
     hasToilets: true,
     hasRepair: false,
     hasParking: true,
-    coordinates: [46.9601, -71.8845],
+    coordinates: [46.898764, -72.025730],
     description: 'Accès Centre de Vacances et campings. Toilettes sèches. Attention : eau non-potable sur les sites de camping nord.'
   },
   {
@@ -145,7 +145,7 @@ export const TRAIL_POIS = [
     hasToilets: true,
     hasRepair: true,
     hasParking: true,
-    coordinates: [46.8872, -71.8335],
+    coordinates: [46.872680, -71.800480],
     description: 'Grand pôle de services : eau potable, toilettes, borne de réparation avec outils/pompe, commerces et grand Refill J2.'
   },
   {
@@ -157,7 +157,7 @@ export const TRAIL_POIS = [
     hasToilets: true,
     hasRepair: false,
     hasParking: true,
-    coordinates: [46.8680, -71.7200],
+    coordinates: [46.855942, -71.732195],
     description: 'Halte panoramique boisée avec tables de pique-nique et toilettes.'
   },
   {
@@ -169,7 +169,7 @@ export const TRAIL_POIS = [
     hasToilets: true,
     hasRepair: true,
     hasParking: true,
-    coordinates: [46.8650, -71.6450],
+    coordinates: [46.862179, -71.624387],
     description: 'Halte principale près de la Station Duchesnay. Eau potable, toilettes et station de réparation vélo.'
   },
   {
@@ -181,7 +181,7 @@ export const TRAIL_POIS = [
     hasToilets: true,
     hasRepair: false,
     hasParking: true,
-    coordinates: [46.8831, -71.5175],
+    coordinates: [46.883654, -71.503609],
     description: 'Halte municipale avec point d\'eau potable, toilettes et stationnement.'
   },
   {
@@ -193,7 +193,7 @@ export const TRAIL_POIS = [
     hasToilets: true,
     hasRepair: true,
     hasParking: true,
-    coordinates: [46.8710, -71.4720],
+    coordinates: [46.868200, -71.472500],
     description: 'Extrémité Sud de la Vélopiste JCP. Jonction directe avec le Corridor des Cheminots vers Québec.'
   },
   {
@@ -205,7 +205,7 @@ export const TRAIL_POIS = [
     hasToilets: true,
     hasRepair: true,
     hasParking: false,
-    coordinates: [46.8534, -71.4282],
+    coordinates: [46.851818, -71.441756],
     description: 'Services urbains complets, épiceries et hébergement Chez Annick et Vincent.'
   },
   {
@@ -217,7 +217,7 @@ export const TRAIL_POIS = [
     hasToilets: true,
     hasRepair: false,
     hasParking: true,
-    coordinates: [46.8202, -71.2421],
+    coordinates: [46.846965, -71.205736],
     description: 'Point d\'arrivée de l\'expédition ! Célébration finale et transports.'
   }
 ];

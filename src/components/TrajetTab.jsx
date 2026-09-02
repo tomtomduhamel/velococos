@@ -295,54 +295,58 @@ export default function TrajetTab() {
         </div>
       </div>
 
-      {/* POI Filter Toggles Bar */}
-      <div className="flex items-center space-x-2 overflow-x-auto pb-1 no-scrollbar">
+      {/* POI Filter Toggles Bar - Grid Responsive */}
+      <div className="grid grid-cols-4 gap-1.5 w-full">
         <button
           type="button"
           onClick={() => toggleFilter('stages')}
-          className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center space-x-1.5 active:scale-95 ${
+          className={`py-2 px-1 rounded-xl text-center border transition-all flex flex-col items-center justify-center active:scale-95 ${
             activePoiFilters.stages
               ? 'bg-emerald-500 text-slate-950 border-emerald-400 font-extrabold shadow-sm'
               : 'bg-slate-800/80 text-slate-400 border-slate-700'
           }`}
         >
-          <span>⛺ Étapes J1-J4</span>
+          <span className="text-sm leading-none">⛺</span>
+          <span className="text-[11px] font-bold mt-1 tracking-tight leading-none">Étapes</span>
         </button>
 
         <button
           type="button"
           onClick={() => toggleFilter('water')}
-          className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center space-x-1.5 active:scale-95 ${
+          className={`py-2 px-1 rounded-xl text-center border transition-all flex flex-col items-center justify-center active:scale-95 ${
             activePoiFilters.water
               ? 'bg-sky-500 text-slate-950 border-sky-400 font-extrabold shadow-sm'
               : 'bg-slate-800/80 text-slate-400 border-slate-700'
           }`}
         >
-          <span>💧 Eau potable</span>
+          <span className="text-sm leading-none">💧</span>
+          <span className="text-[11px] font-bold mt-1 tracking-tight leading-none">Eau</span>
         </button>
 
         <button
           type="button"
           onClick={() => toggleFilter('toilets')}
-          className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center space-x-1.5 active:scale-95 ${
+          className={`py-2 px-1 rounded-xl text-center border transition-all flex flex-col items-center justify-center active:scale-95 ${
             activePoiFilters.toilets
               ? 'bg-purple-500 text-white border-purple-400 font-extrabold shadow-sm'
               : 'bg-slate-800/80 text-slate-400 border-slate-700'
           }`}
         >
-          <span>🚻 Toilettes</span>
+          <span className="text-sm leading-none">🚻</span>
+          <span className="text-[11px] font-bold mt-1 tracking-tight leading-none">Toilettes</span>
         </button>
 
         <button
           type="button"
           onClick={() => toggleFilter('repair')}
-          className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center space-x-1.5 active:scale-95 ${
+          className={`py-2 px-1 rounded-xl text-center border transition-all flex flex-col items-center justify-center active:scale-95 ${
             activePoiFilters.repair
               ? 'bg-amber-500 text-slate-950 border-amber-400 font-extrabold shadow-sm'
               : 'bg-slate-800/80 text-slate-400 border-slate-700'
           }`}
         >
-          <span>🔧 Réparation</span>
+          <span className="text-sm leading-none">🔧</span>
+          <span className="text-[11px] font-bold mt-1 tracking-tight leading-none">Outils</span>
         </button>
       </div>
 
@@ -440,20 +444,27 @@ export default function TrajetTab() {
         </MapContainer>
       </div>
 
-      {/* Stage Selector Pills */}
-      <div className="flex space-x-2 overflow-x-auto pb-1 no-scrollbar">
+      {/* Stage Selector Grid - 100% Mobile Responsive sans débordement */}
+      <div className="grid grid-cols-4 gap-1.5 w-full">
         {INITIAL_STAGES.map((stg) => (
           <button
             key={stg.id}
             type="button"
             onClick={() => handleSelectStage(stg)}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border touch-target active:scale-95 ${
+            className={`py-2 px-1 rounded-xl text-center transition-all border touch-target active:scale-95 flex flex-col items-center justify-center ${
               activeStage.id === stg.id
-                ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-md'
-                : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-md font-black'
+                : 'bg-slate-800/90 text-slate-200 border-slate-700 hover:bg-slate-700'
             }`}
           >
-            J{stg.day} • {stg.distance}
+            <span className="text-xs font-black tracking-tight leading-tight">J{stg.day}</span>
+            <span
+              className={`text-[11px] font-bold tracking-tight leading-tight mt-0.5 ${
+                activeStage.id === stg.id ? 'text-slate-950 font-black' : 'text-slate-400'
+              }`}
+            >
+              {stg.distance}
+            </span>
           </button>
         ))}
       </div>
