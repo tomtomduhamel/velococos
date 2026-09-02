@@ -6,31 +6,64 @@ import fs from 'fs';
 import { DOMParser } from 'xmldom';
 import * as toGeoJSON from '@tmcw/togeojson';
 
-// Chemins relatifs vers le dossier public
-const files = [
-  './public/gpx/t318583107_j1 - velococos.gpx',
-  './public/gpx/t318831228_j2 - velococos.gpx',
-  './public/gpx/t318832812_j3bis - velococos.gpx',
-  './public/gpx/t318833080_j4 - velococos.gpx'
+const stageConfigs = [
+  {
+    file: './public/gpx/t318583107_j1 - velococos.gpx',
+    day: 1,
+    name: 'Étape 1 : Rivière-à-Pierre ➔ Lac Simon',
+    distance: '16 km',
+    color: '#10b981'
+  },
+  {
+    file: './public/gpx/t318831228_j2 - velococos.gpx',
+    day: 2,
+    name: 'Étape 2 : Lac Simon ➔ Saint-Raymond',
+    distance: '19 km',
+    color: '#3b82f6'
+  },
+  {
+    file: './public/gpx/t318832812_j3bis - velococos.gpx',
+    day: 3,
+    name: 'Étape 3 : Saint-Raymond ➔ Val-Bélair',
+    distance: '34 km',
+    color: '#f59e0b'
+  },
+  {
+    file: './public/gpx/t318833080_j4 - velococos.gpx',
+    day: 4,
+    name: 'Étape 4 : Val-Bélair ➔ Québec (François de Laval)',
+    distance: '22 km',
+    color: '#ef4444'
+  }
 ];
 
 const mergedFeatures = [];
 
-files.forEach(file => {
+stageConfigs.forEach(cfg => {
   try {
-    if (fs.existsSync(file)) {
-      const gpxData = fs.readFileSync(file, 'utf8');
+    if (fs.existsSync(cfg.file)) {
+      const gpxData = fs.readFileSync(cfg.file, 'utf8');
       const gpxDom = new DOMParser().parseFromString(gpxData);
       const geojson = toGeoJSON.gpx(gpxDom);
-      if (geojson && geojson.features) {
-        mergedFeatures.push(...geojson.features);
+
+      if (geojson && geojson.features && geojson.features.length > 0) {
+        geojson.features.forEach(feat => {
+          feat.properties = {
+            ...feat.properties,
+            day: cfg.day,
+            name: cfg.name,
+            distance: cfg.distance,
+            color: cfg.color
+          };
+          mergedFeatures.push(feat);
+        });
+        console.log(`✓ Fichier traité avec succès (Jour ${cfg.day}): ${cfg.file}`);
       }
-      console.log(`✓ Fichier traité avec succès: ${file}`);
     } else {
-      console.warn(`! Fichier non trouvé (ignoré pour le moment): ${file}`);
+      console.warn(`! Fichier non trouvé : ${cfg.file}`);
     }
   } catch (error) {
-    console.error(`Erreur de lecture/parsing sur ${file}:`, error);
+    console.error(`Erreur de lecture/parsing sur ${cfg.file}:`, error);
   }
 });
 
@@ -38,14 +71,13 @@ if (!fs.existsSync('./public/gpx')) {
   fs.mkdirSync('./public/gpx', { recursive: true });
 }
 
-// Ne pas écraser les traces par défaut si aucun GPX n'a encore été déposé
 if (mergedFeatures.length > 0) {
   const finalGeoJSON = {
     type: "FeatureCollection",
     features: mergedFeatures
   };
   fs.writeFileSync('./public/gpx/traces_fusionnees.json', JSON.stringify(finalGeoJSON, null, 2));
-  console.log(`Fusion GeoJSON terminée : ${mergedFeatures.length} traces fusionnées dans traces_fusionnees.json.`);
+  console.log(`\n🎉 Fusion GeoJSON réussie : ${mergedFeatures.length} tracés officiels fusionnés dans ./public/gpx/traces_fusionnees.json`);
 } else {
-  console.log('Aucun nouveau fichier GPX trouvé dans ./public/gpx. Le fichier traces_fusionnees.json existant est conservé.');
+  console.warn('Aucun tracé valide extrait des fichiers GPX.');
 }

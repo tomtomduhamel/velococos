@@ -233,9 +233,9 @@ export const INITIAL_STAGES = [
     bookingDetail: 'Emplacement #60',
     address: '150 chemin du Lac Simon, Saint-Léonard-de-Portneuf, QC G0A 4A0',
     phone: '(418) 337-6734',
-    coordinates: [46.9601, -71.8845],
+    coordinates: [46.898764, -72.02573],
     color: '#10b981',
-    notes: 'Terrain ombragé proche du lac, point d\'eau potable et sanitaires.'
+    notes: 'Terrain ombragé proche du lac, point d\'eau et sanitaires au centre de vacances.'
   },
   {
     id: 'stage-j2',
@@ -247,7 +247,7 @@ export const INITIAL_STAGES = [
     bookingDetail: 'Emplacement #C26',
     address: '1070 Rang de la Sagamité, Saint-Raymond, QC G3L 4K8',
     phone: '(418) 337-2270',
-    coordinates: [46.8872, -71.8335],
+    coordinates: [46.87268, -71.80048],
     color: '#3b82f6',
     notes: 'Accès plage, douches chaudes, proximité avec les commerces de Saint-Raymond pour le grand Refill J2.'
   },
@@ -261,7 +261,7 @@ export const INITIAL_STAGES = [
     bookingDetail: 'Hébergement familial / Val-Bélair',
     address: 'Val-Bélair, Québec, QC',
     phone: 'Contact privé',
-    coordinates: [46.8534, -71.4282],
+    coordinates: [46.851818, -71.441756],
     color: '#f59e0b',
     notes: 'Étape la plus longue. Accueil chaleureux, lit confortable et recharge des batteries pour la dernière ligne droite !'
   },
@@ -275,7 +275,7 @@ export const INITIAL_STAGES = [
     bookingDetail: 'Croisement François de Laval / Corridor des Cheminots',
     address: 'Québec, QC',
     phone: '',
-    coordinates: [46.8202, -71.2421],
+    coordinates: [46.846965, -71.205736],
     color: '#ef4444',
     notes: 'Arrivée triomphale de l\'expédition Vélococos ! Photos de groupe et pique-nique final.'
   }

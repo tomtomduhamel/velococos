@@ -15,7 +15,8 @@ import {
   Radio,
   Sparkles,
   Info,
-  ExternalLink
+  ExternalLink,
+  Upload
 } from 'lucide-react';
 import { useAppStore, INITIAL_STAGES, TRAIL_POIS } from '../store/useAppStore';
 import ElevationAndPaceCalculator from './ElevationAndPaceCalculator';
@@ -177,7 +178,7 @@ export default function TrajetTab() {
   const handleSelectStage = (stage) => {
     setActiveStage(stage);
     setMapCenter(stage.coordinates);
-    setMapZoom(13);
+    setMapZoom(12);
   };
 
   const handleSelectPoi = (poi) => {
@@ -185,13 +186,53 @@ export default function TrajetTab() {
     setMapZoom(14);
   };
 
-  const geoJsonStyle = (feature) => ({
-    color: feature.properties?.color || '#10b981',
-    weight: 5,
-    opacity: 0.9,
-    lineCap: 'round',
-    lineJoin: 'round'
-  });
+  // Importateur GPX direct dans le navigateur (Mobile / PC)
+  const handleGpxFileUpload = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const dom = new DOMParser().parseFromString(text, 'text/xml');
+      // Import dynamique de toGeoJSON si disponible, ou parsing simple
+      const toGeoJSON = await import('@tmcw/togeojson');
+      const converted = toGeoJSON.gpx(dom);
+
+      if (converted && converted.features && converted.features.length > 0) {
+        // Associer une couleur
+        converted.features.forEach((feat) => {
+          feat.properties = {
+            ...feat.properties,
+            name: file.name.replace('.gpx', ''),
+            color: '#f59e0b',
+            distance: 'Trace importée'
+          };
+        });
+
+        // Mettre à jour l'état local
+        const updated = geoJsonData
+          ? { ...geoJsonData, features: [...geoJsonData.features, ...converted.features] }
+          : converted;
+
+        setGeoJsonData(updated);
+        alert(`✓ Tracé importé avec succès (${file.name}) !`);
+      }
+    } catch (err) {
+      console.error('Erreur import GPX:', err);
+      alert("Erreur lors de l'import du fichier GPX : " + err.message);
+    }
+  };
+
+  const geoJsonStyle = (feature) => {
+    const isSelected = activeStage && feature.properties?.day === activeStage.day;
+    return {
+      color: feature.properties?.color || '#10b981',
+      weight: isSelected ? 7 : 4,
+      opacity: isSelected ? 1 : 0.7,
+      lineCap: 'round',
+      lineJoin: 'round'
+    };
+  };
 
   // Filtrage des POIs à afficher
   const visiblePois = TRAIL_POIS.filter((poi) => {
@@ -215,15 +256,28 @@ export default function TrajetTab() {
               Km 68 (R-à-P) ➔ Km 0 (Valcartier) ➔ Québec (91 km)
             </p>
           </div>
-          <button
-            type="button"
-            onClick={handleLocateMe}
-            disabled={locating}
-            className="flex items-center space-x-1.5 px-3 py-2 bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-slate-950 font-bold rounded-xl text-xs shadow-lg transition-all touch-target"
-          >
-            <Locate className={`w-4 h-4 ${locating ? 'animate-spin' : ''}`} />
-            <span>{locating ? 'Recherche...' : 'Ma position'}</span>
-          </button>
+          <div className="flex items-center space-x-1.5">
+            <label className="flex items-center space-x-1 px-2.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs border border-slate-700 cursor-pointer active:scale-95 transition-all touch-target">
+              <Upload className="w-4 h-4 text-amber-400" />
+              <span>Import GPX</span>
+              <input
+                type="file"
+                accept=".gpx"
+                onChange={handleGpxFileUpload}
+                className="hidden"
+              />
+            </label>
+
+            <button
+              type="button"
+              onClick={handleLocateMe}
+              disabled={locating}
+              className="flex items-center space-x-1.5 px-3 py-2 bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-slate-950 font-bold rounded-xl text-xs shadow-lg transition-all touch-target"
+            >
+              <Locate className={`w-4 h-4 ${locating ? 'animate-spin' : ''}`} />
+              <span>{locating ? 'GPS...' : 'Position'}</span>
+            </button>
+          </div>
         </div>
 
         {locError && (
