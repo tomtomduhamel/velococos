@@ -131,6 +131,12 @@ export default function ElevationAndPaceCalculator({ stage }) {
               <option value={30}>30 min</option>
               <option value={45}>45 min</option>
               <option value={60}>1h00</option>
+              <option value={75}>1h15</option>
+              <option value={90}>1h30</option>
+              <option value={105}>1h45</option>
+              <option value={120}>2h00</option>
+              <option value={150}>2h30</option>
+              <option value={180}>3h00</option>
             </select>
           </div>
         </div>
