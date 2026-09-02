@@ -1,9 +1,9 @@
 import React from 'react';
-import { Wifi, WifiOff, RefreshCw, Compass, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Wifi, WifiOff, RefreshCw, Compass, CheckCircle2, AlertCircle, ShieldAlert } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 import { syncWithSupabase } from '../services/syncService';
 
-export default function Header({ onOpenSync }) {
+export default function Header({ onOpenSync, onOpenSecurity }) {
   const { isOnline, syncStatus, lastSyncedAt, hasPendingChanges } = useAppStore();
 
   const handleSyncClick = (e) => {
@@ -36,8 +36,18 @@ export default function Header({ onOpenSync }) {
         </div>
       </div>
 
-      {/* Network & Sync status */}
-      <div className="flex items-center space-x-2">
+      {/* Actions & Status */}
+      <div className="flex items-center space-x-1.5">
+        {/* Security & Emergency Button */}
+        <button
+          type="button"
+          onClick={onOpenSecurity}
+          title="Sécurité, Faune & Urgences"
+          className="p-2 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300 active:scale-95 transition-all touch-target flex items-center justify-center"
+        >
+          <ShieldAlert className="w-4 h-4" />
+        </button>
+
         {/* Offline / Online badge */}
         <button
           type="button"

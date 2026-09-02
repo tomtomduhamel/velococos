@@ -1,11 +1,26 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, GeoJSON, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapPin, Navigation, Phone, ExternalLink, Locate, Home, Tent, Flame, Flag } from 'lucide-react';
-import { useAppStore, INITIAL_STAGES } from '../store/useAppStore';
+import {
+  MapPin,
+  Navigation,
+  Phone,
+  Locate,
+  Home,
+  Tent,
+  Droplets,
+  Wrench,
+  Layers,
+  Radio,
+  Sparkles,
+  Info,
+  ExternalLink
+} from 'lucide-react';
+import { useAppStore, INITIAL_STAGES, TRAIL_POIS } from '../store/useAppStore';
+import ElevationAndPaceCalculator from './ElevationAndPaceCalculator';
 
-// Création d'icônes Leaflet personnalisées à haut contraste en DivIcon (évite les bugs d'images manquantes Leaflet)
+// Icônes personnalisées pour les étapes (J1 à J4)
 const createStageIcon = (day, color) => {
   return L.divIcon({
     className: 'custom-stage-marker',
@@ -36,17 +51,57 @@ const createStageIcon = (day, color) => {
   });
 };
 
+// Icône personnalisée pour les POI officiels
+const createPoiIcon = (type) => {
+  let bgColor = '#0284c7';
+  let emoji = '📍';
+
+  if (type === 'water') {
+    bgColor = '#06b6d4';
+    emoji = '💧';
+  } else if (type === 'repair') {
+    bgColor = '#f59e0b';
+    emoji = '🔧';
+  } else if (type === 'toilets') {
+    bgColor = '#8b5cf6';
+    emoji = '🚻';
+  }
+
+  return L.divIcon({
+    className: 'custom-poi-marker',
+    html: `
+      <div style="
+        background-color: ${bgColor};
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        font-size: 12px;
+      ">
+        ${emoji}
+      </div>
+    `,
+    iconSize: [26, 26],
+    iconAnchor: [13, 13],
+    popupAnchor: [0, -13]
+  });
+};
+
 const createUserLocationIcon = () => {
   return L.divIcon({
     className: 'custom-user-marker',
     html: `
       <div style="
-        background-color: #0284c7;
+        background-color: #10b981;
         width: 20px;
         height: 20px;
         border-radius: 50%;
         border: 3px solid white;
-        box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.4);
+        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.4);
       "></div>
     `,
     iconSize: [20, 20],
@@ -54,7 +109,6 @@ const createUserLocationIcon = () => {
   });
 };
 
-// Composant interne pour recentrer la carte
 function MapController({ center, zoom }) {
   const map = useMap();
   useEffect(() => {
@@ -73,6 +127,21 @@ export default function TrajetTab() {
   const [userLocation, setUserLocation] = useState(null);
   const [locating, setLocating] = useState(false);
   const [locError, setLocError] = useState(null);
+
+  // Filtres POI interactifs
+  const [activePoiFilters, setActivePoiFilters] = useState({
+    stages: true,
+    water: true,
+    toilets: true,
+    repair: true
+  });
+
+  const toggleFilter = (filterKey) => {
+    setActivePoiFilters((prev) => ({
+      ...prev,
+      [filterKey]: !prev[filterKey]
+    }));
+  };
 
   // Chargement du fichier traces_fusionnees.json
   useEffect(() => {
@@ -111,12 +180,25 @@ export default function TrajetTab() {
     setMapZoom(13);
   };
 
+  const handleSelectPoi = (poi) => {
+    setMapCenter(poi.coordinates);
+    setMapZoom(14);
+  };
+
   const geoJsonStyle = (feature) => ({
     color: feature.properties?.color || '#10b981',
     weight: 5,
     opacity: 0.9,
     lineCap: 'round',
     lineJoin: 'round'
+  });
+
+  // Filtrage des POIs à afficher
+  const visiblePois = TRAIL_POIS.filter((poi) => {
+    if (poi.type === 'water' && activePoiFilters.water) return true;
+    if (poi.type === 'toilets' && activePoiFilters.toilets) return true;
+    if (poi.type === 'repair' && activePoiFilters.repair) return true;
+    return false;
   });
 
   return (
@@ -130,7 +212,7 @@ export default function TrajetTab() {
               Trace Jacques-Cartier / Portneuf
             </h2>
             <p className="text-xs text-slate-400 mt-0.5">
-              91 km au total • 4 jours en autonomie vélo-course
+              Km 68 (R-à-P) ➔ Km 0 (Valcartier) ➔ Québec (91 km)
             </p>
           </div>
           <button
@@ -149,10 +231,69 @@ export default function TrajetTab() {
             {locError}
           </div>
         )}
+
+        {/* Alerte Zone Blanche Réseau Cellulaire */}
+        <div className="mt-3 p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-start space-x-2 text-amber-300 text-xs">
+          <Radio className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+          <div className="leading-snug">
+            <span className="font-black">Zone Blanche Cellulaire :</span> Du Km 68 (Rivière-à-Pierre) au Km 48 (Lac Simon), le réseau cellulaire est inexistant. L'application reste 100% active hors-ligne.
+          </div>
+        </div>
+      </div>
+
+      {/* POI Filter Toggles Bar */}
+      <div className="flex items-center space-x-2 overflow-x-auto pb-1 no-scrollbar">
+        <button
+          type="button"
+          onClick={() => toggleFilter('stages')}
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center space-x-1.5 active:scale-95 ${
+            activePoiFilters.stages
+              ? 'bg-emerald-500 text-slate-950 border-emerald-400 font-extrabold shadow-sm'
+              : 'bg-slate-800/80 text-slate-400 border-slate-700'
+          }`}
+        >
+          <span>⛺ Étapes J1-J4</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => toggleFilter('water')}
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center space-x-1.5 active:scale-95 ${
+            activePoiFilters.water
+              ? 'bg-sky-500 text-slate-950 border-sky-400 font-extrabold shadow-sm'
+              : 'bg-slate-800/80 text-slate-400 border-slate-700'
+          }`}
+        >
+          <span>💧 Eau potable</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => toggleFilter('toilets')}
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center space-x-1.5 active:scale-95 ${
+            activePoiFilters.toilets
+              ? 'bg-purple-500 text-white border-purple-400 font-extrabold shadow-sm'
+              : 'bg-slate-800/80 text-slate-400 border-slate-700'
+          }`}
+        >
+          <span>🚻 Toilettes</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => toggleFilter('repair')}
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex items-center space-x-1.5 active:scale-95 ${
+            activePoiFilters.repair
+              ? 'bg-amber-500 text-slate-950 border-amber-400 font-extrabold shadow-sm'
+              : 'bg-slate-800/80 text-slate-400 border-slate-700'
+          }`}
+        >
+          <span>🔧 Réparation</span>
+        </button>
       </div>
 
       {/* Interactive Leaflet Map */}
-      <div className="h-72 w-full rounded-2xl overflow-hidden border-2 border-slate-700/80 shadow-xl relative z-0">
+      <div className="h-80 w-full rounded-2xl overflow-hidden border-2 border-slate-700/80 shadow-xl relative z-0">
         <MapContainer
           center={mapCenter}
           zoom={mapZoom}
@@ -183,22 +324,51 @@ export default function TrajetTab() {
             />
           )}
 
-          {/* Markers for each stage */}
-          {INITIAL_STAGES.map((stage) => (
+          {/* Markers for stages (J1 à J4) */}
+          {activePoiFilters.stages &&
+            INITIAL_STAGES.map((stage) => (
+              <Marker
+                key={stage.id}
+                position={stage.coordinates}
+                icon={createStageIcon(stage.day, stage.color)}
+                eventHandlers={{
+                  click: () => handleSelectStage(stage)
+                }}
+              >
+                <Popup>
+                  <div className="p-1 text-slate-900 font-sans">
+                    <div className="font-bold text-sm">{stage.title}</div>
+                    <div className="text-xs text-emerald-700 font-semibold">{stage.accommodation}</div>
+                    <div className="text-xs bg-slate-100 p-1 rounded mt-1 font-mono">
+                      {stage.bookingDetail}
+                    </div>
+                  </div>
+                </Popup>
+              </Marker>
+            ))}
+
+          {/* Markers for Official POIs */}
+          {visiblePois.map((poi) => (
             <Marker
-              key={stage.id}
-              position={stage.coordinates}
-              icon={createStageIcon(stage.day, stage.color)}
+              key={poi.id}
+              position={poi.coordinates}
+              icon={createPoiIcon(poi.type)}
               eventHandlers={{
-                click: () => handleSelectStage(stage)
+                click: () => handleSelectPoi(poi)
               }}
             >
               <Popup>
-                <div className="p-1 text-slate-900 font-sans">
-                  <div className="font-bold text-sm">{stage.title}</div>
-                  <div className="text-xs text-emerald-700 font-semibold">{stage.accommodation}</div>
-                  <div className="text-xs bg-slate-100 p-1 rounded mt-1 font-mono">
-                    {stage.bookingDetail}
+                <div className="p-1 text-slate-900 font-sans max-w-[200px]">
+                  <div className="font-extrabold text-sm text-slate-900">{poi.name}</div>
+                  <div className="text-xs font-bold text-sky-700">{poi.km}</div>
+                  <div className="flex flex-wrap gap-1 my-1">
+                    {poi.hasWater && <span className="bg-sky-100 text-sky-800 text-[10px] px-1.5 py-0.5 rounded font-bold">Eau</span>}
+                    {poi.hasToilets && <span className="bg-purple-100 text-purple-800 text-[10px] px-1.5 py-0.5 rounded font-bold">Toilettes</span>}
+                    {poi.hasRepair && <span className="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded font-bold">Outils</span>}
+                    {poi.hasParking && <span className="bg-slate-100 text-slate-700 text-[10px] px-1.5 py-0.5 rounded font-bold">Parking</span>}
+                  </div>
+                  <div className="text-[11px] text-slate-600 leading-tight mt-1">
+                    {poi.description}
                   </div>
                 </div>
               </Popup>
@@ -209,7 +379,7 @@ export default function TrajetTab() {
           {userLocation && (
             <Marker position={userLocation} icon={createUserLocationIcon()}>
               <Popup>
-                <div className="text-xs font-bold text-sky-700">Vous êtes ici !</div>
+                <div className="text-xs font-bold text-emerald-700">Vous êtes ici !</div>
               </Popup>
             </Marker>
           )}
@@ -294,6 +464,44 @@ export default function TrajetTab() {
         <div className="text-xs text-slate-400 bg-slate-950/50 p-2.5 rounded-xl border border-slate-800/60 leading-relaxed">
           <span className="text-amber-400 font-bold mr-1">Info Piste :</span>
           {activeStage.notes}
+        </div>
+      </div>
+
+      {/* Profil altimétrique & Calculateur d'allure de course chariot */}
+      <ElevationAndPaceCalculator stage={activeStage} />
+
+      {/* État du sentier officiel & Météo prévisionnelle */}
+      <div className="bg-slate-900/95 rounded-2xl p-4 border border-slate-800 shadow-md space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Info className="w-5 h-5 text-sky-400" />
+            <h4 className="text-sm font-black text-white">État du Sentier & Météo Piste</h4>
+          </div>
+          <a
+            href="https://velopistejcp.com/la-piste/etat-du-sentier/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[11px] font-bold text-sky-400 hover:text-sky-300 flex items-center gap-1 bg-sky-500/10 px-2.5 py-1 rounded-lg border border-sky-500/30"
+          >
+            <span>Site officiel JCP</span>
+            <ExternalLink className="w-3 h-3" />
+          </a>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 text-xs">
+          <div className="bg-slate-800/70 p-2.5 rounded-xl border border-slate-700">
+            <span className="text-slate-400 font-bold block mb-1">🌤️ Climat (4-7 Sept)</span>
+            <p className="text-slate-300 leading-snug">
+              Journée : <strong>18°C à 23°C</strong><br/>
+              Nuit (tente) : <strong>8°C à 12°C</strong>
+            </p>
+          </div>
+          <div className="bg-slate-800/70 p-2.5 rounded-xl border border-slate-700">
+            <span className="text-slate-400 font-bold block mb-1">🛤️ Surface de roulement</span>
+            <p className="text-slate-300 leading-snug">
+              Poussière de pierre fine compactée. Idéale pour chariot de course et pneus gravel.
+            </p>
+          </div>
         </div>
       </div>
     </div>

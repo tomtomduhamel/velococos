@@ -23,6 +23,11 @@ const INITIAL_MATERIEL = [
   { id: 'mat-18', title: 'Support téléphone étanche pour guidon', category: 'Énergie & Navigation', checked: false },
   { id: 'mat-19', title: 'Sacs étanches / poubelles pour protection pluie', category: 'Divers', checked: false },
   { id: 'mat-20', title: 'Briquet / allumettes étanches + couteau suisse', category: 'Divers', checked: false },
+  { id: 'mat-21', title: 'Tendeurs / sardines d\'ancrage pour plateforme bois (12x12)', category: 'Bivouac', checked: false },
+  { id: 'mat-22', title: 'Pastilles purification (Aquatabs) ou filtre à eau (zone nord non-potable)', category: 'Santé & Sécurité', checked: false },
+  { id: 'mat-23', title: 'Clochette / sifflet anti-ours pour le chariot', category: 'Course & Chariot', checked: false },
+  { id: 'mat-24', title: 'Lubrifiant chaîne spécial temps sec / poussière de pierre', category: 'Course & Chariot', checked: false },
+  { id: 'mat-25', title: 'Preuve de réservation camping sauvegardée (hors-ligne)', category: 'Divers', checked: false }
 ];
 
 const INITIAL_LINGE_PAPA = [
@@ -103,6 +108,117 @@ const INITIAL_REFILLS = [
       '1x Déjeuner J4 (bagels, fruits, café/chocolat chaud)'
     ],
     completed: false
+  }
+];
+
+export const TRAIL_POIS = [
+  {
+    id: 'poi-rap',
+    name: 'Gare de Rivière-à-Pierre',
+    km: 'Km 68 (Départ)',
+    type: 'water',
+    hasWater: true,
+    hasToilets: true,
+    hasRepair: true,
+    hasParking: true,
+    coordinates: [46.9928, -72.0002],
+    description: 'Point de départ au nord. Eau potable à la gare, toilettes, stationnement et point de débarquement VIA Rail.'
+  },
+  {
+    id: 'poi-lac-simon',
+    name: 'Halte Saint-Léonard / Lac Simon',
+    km: 'Km 48.5',
+    type: 'toilets',
+    hasWater: false,
+    hasToilets: true,
+    hasRepair: false,
+    hasParking: true,
+    coordinates: [46.9601, -71.8845],
+    description: 'Accès Centre de Vacances et campings. Toilettes sèches. Attention : eau non-potable sur les sites de camping nord.'
+  },
+  {
+    id: 'poi-st-raymond',
+    name: 'Gare / Halte Saint-Raymond',
+    km: 'Km 31',
+    type: 'repair',
+    hasWater: true,
+    hasToilets: true,
+    hasRepair: true,
+    hasParking: true,
+    coordinates: [46.8872, -71.8335],
+    description: 'Grand pôle de services : eau potable, toilettes, borne de réparation avec outils/pompe, commerces et grand Refill J2.'
+  },
+  {
+    id: 'poi-lac-sergent',
+    name: 'Halte Lac-Sergent',
+    km: 'Km 26.5',
+    type: 'toilets',
+    hasWater: false,
+    hasToilets: true,
+    hasRepair: false,
+    hasParking: true,
+    coordinates: [46.8680, -71.7200],
+    description: 'Halte panoramique boisée avec tables de pique-nique et toilettes.'
+  },
+  {
+    id: 'poi-sainte-catherine',
+    name: 'Halte Duchesnay / Sainte-Catherine',
+    km: 'Km 14',
+    type: 'repair',
+    hasWater: true,
+    hasToilets: true,
+    hasRepair: true,
+    hasParking: true,
+    coordinates: [46.8650, -71.6450],
+    description: 'Halte principale près de la Station Duchesnay. Eau potable, toilettes et station de réparation vélo.'
+  },
+  {
+    id: 'poi-shannon',
+    name: 'Halte de Shannon',
+    km: 'Km 5',
+    type: 'water',
+    hasWater: true,
+    hasToilets: true,
+    hasRepair: false,
+    hasParking: true,
+    coordinates: [46.8831, -71.5175],
+    description: 'Halte municipale avec point d\'eau potable, toilettes et stationnement.'
+  },
+  {
+    id: 'poi-valcartier',
+    name: 'Halte Saint-Gabriel-de-Valcartier',
+    km: 'Km 0 (Extrémité Sud)',
+    type: 'toilets',
+    hasWater: true,
+    hasToilets: true,
+    hasRepair: true,
+    hasParking: true,
+    coordinates: [46.8710, -71.4720],
+    description: 'Extrémité Sud de la Vélopiste JCP. Jonction directe avec le Corridor des Cheminots vers Québec.'
+  },
+  {
+    id: 'poi-val-belair',
+    name: 'Halte Val-Bélair (Cheminots)',
+    km: 'Étape J3',
+    type: 'water',
+    hasWater: true,
+    hasToilets: true,
+    hasRepair: true,
+    hasParking: false,
+    coordinates: [46.8534, -71.4282],
+    description: 'Services urbains complets, épiceries et hébergement Chez Annick et Vincent.'
+  },
+  {
+    id: 'poi-quebec-arrivee',
+    name: 'Québec - Croisement François de Laval',
+    km: 'Arrivée J4',
+    type: 'toilets',
+    hasWater: true,
+    hasToilets: true,
+    hasRepair: false,
+    hasParking: true,
+    coordinates: [46.8202, -71.2421],
+    description: 'Point d\'arrivée de l\'expédition ! Célébration finale et transports.'
   }
 ];
 
