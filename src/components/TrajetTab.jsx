@@ -253,7 +253,7 @@ export default function TrajetTab() {
               Trace Jacques-Cartier / Portneuf
             </h2>
             <p className="text-xs text-slate-400 mt-0.5">
-              Km 68 (R-à-P) ➔ Km 0 (Valcartier) ➔ Québec (91 km)
+              Km 68 (R-à-P) ➔ Km 0 (Valcartier) ➔ Québec • 101.8 km au total
             </p>
           </div>
           <div className="flex items-center space-x-1.5">

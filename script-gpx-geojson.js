@@ -11,28 +11,28 @@ const stageConfigs = [
     file: './public/gpx/t318583107_j1 - velococos.gpx',
     day: 1,
     name: 'Étape 1 : Rivière-à-Pierre ➔ Lac Simon',
-    distance: '16 km',
+    distance: '21.6 km',
     color: '#10b981'
   },
   {
     file: './public/gpx/t318831228_j2 - velococos.gpx',
     day: 2,
     name: 'Étape 2 : Lac Simon ➔ Saint-Raymond',
-    distance: '19 km',
+    distance: '21.6 km',
     color: '#3b82f6'
   },
   {
     file: './public/gpx/t318832812_j3bis - velococos.gpx',
     day: 3,
     name: 'Étape 3 : Saint-Raymond ➔ Val-Bélair',
-    distance: '34 km',
+    distance: '36.0 km',
     color: '#f59e0b'
   },
   {
     file: './public/gpx/t318833080_j4 - velococos.gpx',
     day: 4,
     name: 'Étape 4 : Val-Bélair ➔ Québec (François de Laval)',
-    distance: '22 km',
+    distance: '22.6 km',
     color: '#ef4444'
   }
 ];

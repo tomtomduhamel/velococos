@@ -22,15 +22,15 @@ export default function ElevationAndPaceCalculator({ stage }) {
   arrivalDate.setMinutes(arrivalDate.getMinutes() + totalMinutes);
   const arrivalTimeString = arrivalDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-  // Altitude approximative par étape
+  // Altitude et dénivelés exacts extraits des fichiers GPX
   const altitudeProfiles = {
-    1: { start: 230, end: 180, diff: -50, trend: 'Descente douce (-50m)' },
-    2: { start: 180, end: 140, diff: -40, trend: 'Descente régulière (-40m)' },
-    3: { start: 140, end: 85, diff: -55, trend: 'Faux-plat descendant (-55m)' },
-    4: { start: 85, end: 20, diff: -65, trend: 'Descente vers le fleuve (-65m)' }
+    1: { start: 215, end: 178, diff: -37, dPlus: 325, dMinus: 361, trend: 'Descente nette (-37m, D+ 325m)' },
+    2: { start: 179, end: 174, diff: -5, dPlus: 265, dMinus: 270, trend: 'Vallonné régulier (D+ 265m / D- 270m)' },
+    3: { start: 176, end: 230, diff: 54, dPlus: 461, dMinus: 407, trend: 'Étape reine vallonnée (D+ 461m)' },
+    4: { start: 231, end: 7, diff: -224, dPlus: 185, dMinus: 408, trend: 'Descente vers le fleuve (-224m)' }
   };
 
-  const profile = altitudeProfiles[stage.day] || { start: 200, end: 50, diff: -150, trend: 'Descente favorable' };
+  const profile = altitudeProfiles[stage.day] || { start: 200, end: 50, diff: -150, dPlus: 300, dMinus: 450, trend: 'Profil GPX' };
 
   return (
     <div className="bg-slate-900/95 rounded-2xl p-4 border border-slate-800 shadow-lg space-y-4">
@@ -40,19 +40,23 @@ export default function ElevationAndPaceCalculator({ stage }) {
           <h4 className="text-base font-black text-white">Profil Altimétrique & Allure Chariot</h4>
         </div>
         <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-          D+ Favorable
+          D+ {profile.dPlus}m / D- {profile.dMinus}m
         </span>
       </div>
 
       {/* Profil Dénivelé */}
       <div className="bg-slate-800/70 p-3 rounded-xl border border-slate-700 space-y-2">
         <div className="flex items-center justify-between text-xs">
-          <span className="text-slate-400">Pente ferroviaire :</span>
+          <span className="text-slate-400">Tendance du relief :</span>
           <span className="text-emerald-300 font-bold">{profile.trend}</span>
         </div>
         <div className="flex items-center justify-between text-xs">
           <span className="text-slate-400">Altitude départ ➔ arrivée :</span>
           <span className="text-slate-200 font-mono font-bold">{profile.start} m ➔ {profile.end} m</span>
+        </div>
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-slate-400">Dénivelé total de l'étape :</span>
+          <span className="text-slate-200 font-mono font-bold text-amber-300">+{profile.dPlus}m / -{profile.dMinus}m</span>
         </div>
 
         {/* Visual Bar Indicator */}
