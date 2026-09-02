@@ -194,20 +194,26 @@ export default function MiamTab() {
           </form>
         )}
 
-        {/* Day Filter Pills */}
-        <div className="flex space-x-2 overflow-x-auto pb-1 no-scrollbar pt-1">
-          {['ALL', 'J1', 'J2', 'J3', 'J4'].map((day) => (
+        {/* Day Filter Grid - 100% Mobile Safe sans débordement */}
+        <div className="grid grid-cols-5 gap-1.5 w-full pt-1">
+          {[
+            { id: 'ALL', label: 'Tous' },
+            { id: 'J1', label: 'J1' },
+            { id: 'J2', label: 'J2' },
+            { id: 'J3', label: 'J3' },
+            { id: 'J4', label: 'J4' }
+          ].map((item) => (
             <button
-              key={day}
+              key={item.id}
               type="button"
-              onClick={() => setSelectedDay(day)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border touch-target active:scale-95 ${
-                selectedDay === day
-                  ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-md'
+              onClick={() => setSelectedDay(item.id)}
+              className={`py-2 px-1 rounded-xl text-center text-xs font-bold transition-all border touch-target active:scale-95 ${
+                selectedDay === item.id
+                  ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-md font-black'
                   : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
               }`}
             >
-              {day === 'ALL' ? 'Tous les jours' : day}
+              {item.label}
             </button>
           ))}
         </div>

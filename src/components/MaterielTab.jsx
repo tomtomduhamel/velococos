@@ -124,22 +124,39 @@ export default function MaterielTab() {
           </form>
         )}
 
-        {/* Filter pills */}
-        <div className="flex space-x-2 overflow-x-auto pb-1 no-scrollbar pt-1">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              type="button"
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border whitespace-nowrap touch-target active:scale-95 ${
-                selectedCategory === cat
-                  ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-md'
-                  : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
-              }`}
-            >
-              {cat === 'ALL' ? 'Tout le matériel' : cat}
-            </button>
-          ))}
+        {/* Filter pills - Wrap 100% visible sans aucun débordement */}
+        <div className="flex flex-wrap gap-1.5 pt-1">
+          {categories.map((cat) => {
+            const count =
+              cat === 'ALL'
+                ? materielList.length
+                : materielList.filter((i) => i.category === cat).length;
+            const label = cat === 'ALL' ? 'Tout le matériel' : cat;
+
+            return (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setSelectedCategory(cat)}
+                className={`py-1.5 px-3 rounded-xl text-xs font-bold transition-all border touch-target active:scale-95 flex items-center space-x-1.5 ${
+                  selectedCategory === cat
+                    ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-md font-black'
+                    : 'bg-slate-800/90 text-slate-300 border-slate-700 hover:bg-slate-700'
+                }`}
+              >
+                <span>{label}</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-extrabold leading-none ${
+                    selectedCategory === cat
+                      ? 'bg-slate-950/20 text-slate-950'
+                      : 'bg-slate-700 text-slate-300'
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
