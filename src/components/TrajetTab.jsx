@@ -283,39 +283,39 @@ export default function TrajetTab() {
   return (
     <div className="flex flex-col space-y-4 pb-24">
       {/* Overview Card */}
-      <div className="bg-slate-900/90 rounded-2xl p-4 border border-slate-800 shadow-md">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-black text-white flex items-center gap-2">
-              <Navigation className="w-5 h-5 text-emerald-400" />
-              Trace Jacques-Cartier / Portneuf
-            </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Km 68 (R-à-P) ➔ Km 0 (Valcartier) ➔ Québec • 101.8 km au total
-            </p>
-          </div>
-          <div className="flex items-center space-x-1.5">
-            <label className="flex items-center space-x-1 px-2.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs border border-slate-700 cursor-pointer active:scale-95 transition-all touch-target">
-              <Upload className="w-4 h-4 text-amber-400" />
-              <span>Import GPX</span>
-              <input
-                type="file"
-                accept=".gpx"
-                onChange={handleGpxFileUpload}
-                className="hidden"
-              />
-            </label>
+      <div className="bg-slate-900/90 rounded-2xl p-4 border border-slate-800 shadow-md space-y-3">
+        <div>
+          <h2 className="text-lg font-black text-white flex items-center gap-2">
+            <Navigation className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+            <span>Trace Jacques-Cartier / Portneuf</span>
+          </h2>
+          <p className="text-xs text-slate-400 mt-1">
+            Km 68 (R-à-P) ➔ Km 0 (Valcartier) ➔ Québec • 101.8 km au total
+          </p>
+        </div>
 
-            <button
-              type="button"
-              onClick={handleLocateMe}
-              disabled={locating}
-              className="flex items-center space-x-1.5 px-3 py-2 bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-slate-950 font-bold rounded-xl text-xs shadow-lg transition-all touch-target"
-            >
-              <Locate className={`w-4 h-4 ${locating ? 'animate-spin' : ''}`} />
-              <span>{locating ? 'GPS...' : 'Position'}</span>
-            </button>
-          </div>
+        {/* Boutons d'actions en rangée 50/50 sans écrasement */}
+        <div className="grid grid-cols-2 gap-2 pt-0.5">
+          <label className="flex items-center justify-center space-x-1.5 py-2 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs border border-slate-700 cursor-pointer active:scale-95 transition-all touch-target">
+            <Upload className="w-4 h-4 text-amber-400 flex-shrink-0" />
+            <span>Import GPX</span>
+            <input
+              type="file"
+              accept=".gpx"
+              onChange={handleGpxFileUpload}
+              className="hidden"
+            />
+          </label>
+
+          <button
+            type="button"
+            onClick={handleLocateMe}
+            disabled={locating}
+            className="flex items-center justify-center space-x-1.5 py-2 px-3 bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 font-black rounded-xl text-xs shadow-md shadow-emerald-500/20 transition-all touch-target"
+          >
+            <Locate className={`w-4 h-4 ${locating ? 'animate-spin' : ''} flex-shrink-0`} />
+            <span>{locating ? 'GPS...' : 'Ma position'}</span>
+          </button>
         </div>
 
         {locError && (
