@@ -7,6 +7,7 @@ import MaterielTab from './components/MaterielTab';
 import LingeTab from './components/LingeTab';
 import SyncModal from './components/SyncModal';
 import SecurityModal from './components/SecurityModal';
+import AuthLockScreen from './components/AuthLockScreen';
 import { useAppStore } from './store/useAppStore';
 import { initSyncService } from './services/syncService';
 
@@ -15,11 +16,34 @@ export default function App() {
   const [isSyncModalOpen, setIsSyncModalOpen] = useState(false);
   const [isSecurityModalOpen, setIsSecurityModalOpen] = useState(false);
 
+  // Authentification locale persistante
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    try {
+      return localStorage.getItem('velococos_auth_token') === 'authenticated_familleNobregaDuhamel';
+    } catch {
+      return false;
+    }
+  });
+
   useEffect(() => {
     // Initialisation des écouteurs réseau et synchronisation asynchrone
     const cleanup = initSyncService();
     return cleanup;
   }, []);
+
+  const handleLock = () => {
+    try {
+      localStorage.removeItem('velococos_auth_token');
+    } catch (err) {
+      console.error(err);
+    }
+    setIsAuthenticated(false);
+  };
+
+  // Si non authentifié, afficher l'écran de verrouillage
+  if (!isAuthenticated) {
+    return <AuthLockScreen onAuthenticated={() => setIsAuthenticated(true)} />;
+  }
 
   return (
     <div className="min-h-screen min-h-[100dvh] bg-slate-950 text-slate-100 flex flex-col antialiased selection:bg-emerald-500 selection:text-slate-950">
@@ -29,6 +53,7 @@ export default function App() {
         <Header
           onOpenSync={() => setIsSyncModalOpen(true)}
           onOpenSecurity={() => setIsSecurityModalOpen(true)}
+          onLock={handleLock}
         />
 
         {/* Zone de contenu défilable */}

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Wifi, WifiOff, RefreshCw, Compass, CheckCircle2, AlertCircle, ShieldAlert } from 'lucide-react';
+import { Wifi, WifiOff, RefreshCw, Compass, CheckCircle2, AlertCircle, ShieldAlert, Lock } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 import { syncWithSupabase } from '../services/syncService';
 
-export default function Header({ onOpenSync, onOpenSecurity }) {
+export default function Header({ onOpenSync, onOpenSecurity, onLock }) {
   const { isOnline, syncStatus, lastSyncedAt, hasPendingChanges } = useAppStore();
 
   const handleSyncClick = (e) => {
@@ -47,6 +47,18 @@ export default function Header({ onOpenSync, onOpenSecurity }) {
         >
           <ShieldAlert className="w-4 h-4" />
         </button>
+
+        {/* Lock button */}
+        {onLock && (
+          <button
+            type="button"
+            onClick={onLock}
+            title="Verrouiller l'accès"
+            className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-400 hover:text-white active:scale-95 transition-all touch-target flex items-center justify-center"
+          >
+            <Lock className="w-4 h-4" />
+          </button>
+        )}
 
         {/* Offline / Online badge */}
         <button
