@@ -110,13 +110,42 @@ const createUserLocationIcon = () => {
   });
 };
 
-function MapController({ center, zoom }) {
+const STAGE_START_COORDS = {
+  1: [46.989283, -72.179923], // Gare Rivière-à-Pierre
+  2: [46.898764, -72.025730], // Lac Simon
+  3: [46.872680, -71.800480], // Saint-Raymond
+  4: [46.851818, -71.441756]  // Val-Bélair
+};
+
+const getStageBounds = (stage, data) => {
+  if (data?.features) {
+    const dayFeature = data.features.find((f) => f.properties?.day === stage.day);
+    if (dayFeature?.geometry?.coordinates?.length) {
+      const latLngs = dayFeature.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+      return L.latLngBounds(latLngs);
+    }
+  }
+
+  const startCoord = STAGE_START_COORDS[stage.day] || stage.coordinates;
+  const endCoord = stage.coordinates;
+  return L.latLngBounds([startCoord, endCoord]);
+};
+
+function MapController({ center, zoom, bounds }) {
   const map = useMap();
   useEffect(() => {
-    if (center) {
+    if (bounds) {
+      map.fitBounds(bounds, {
+        paddingTopLeft: [20, 25],
+        paddingBottomRight: [20, 25],
+        maxZoom: 13,
+        animate: true,
+        duration: 0.8
+      });
+    } else if (center) {
       map.setView(center, zoom || 12, { animate: true });
     }
-  }, [center, zoom, map]);
+  }, [bounds, center, zoom, map]);
   return null;
 }
 
@@ -125,6 +154,7 @@ export default function TrajetTab() {
   const [activeStage, setActiveStage] = useState(INITIAL_STAGES[0]);
   const [mapCenter, setMapCenter] = useState([46.91, -71.75]);
   const [mapZoom, setMapZoom] = useState(10);
+  const [mapBounds, setMapBounds] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
   const [locating, setLocating] = useState(false);
   const [locError, setLocError] = useState(null);
@@ -144,11 +174,15 @@ export default function TrajetTab() {
     }));
   };
 
-  // Chargement du fichier traces_fusionnees.json
+  // Chargement du fichier traces_fusionnees.json et cadrage initial sur le J1 entier
   useEffect(() => {
     fetch('/gpx/traces_fusionnees.json')
       .then((res) => res.json())
-      .then((data) => setGeoJsonData(data))
+      .then((data) => {
+        setGeoJsonData(data);
+        const j1Bounds = getStageBounds(INITIAL_STAGES[0], data);
+        setMapBounds(j1Bounds);
+      })
       .catch((err) => console.error('Erreur chargement GeoJSON:', err));
   }, []);
 
@@ -163,6 +197,7 @@ export default function TrajetTab() {
       (pos) => {
         const coords = [pos.coords.latitude, pos.coords.longitude];
         setUserLocation(coords);
+        setMapBounds(null);
         setMapCenter(coords);
         setMapZoom(14);
         setLocating(false);
@@ -175,13 +210,16 @@ export default function TrajetTab() {
     );
   };
 
+  // Au clic sur un jour, centrer la carte sur TOUT le parcours du jour (départ à gauche, arrivée à droite)
   const handleSelectStage = (stage) => {
     setActiveStage(stage);
-    setMapCenter(stage.coordinates);
-    setMapZoom(12);
+    const bounds = getStageBounds(stage, geoJsonData);
+    setMapCenter(null);
+    setMapBounds(bounds);
   };
 
   const handleSelectPoi = (poi) => {
+    setMapBounds(null);
     setMapCenter(poi.coordinates);
     setMapZoom(14);
   };
@@ -358,7 +396,7 @@ export default function TrajetTab() {
           scrollWheelZoom={false}
           className="h-full w-full"
         >
-          <MapController center={mapCenter} zoom={mapZoom} />
+          <MapController center={mapCenter} zoom={mapZoom} bounds={mapBounds} />
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
