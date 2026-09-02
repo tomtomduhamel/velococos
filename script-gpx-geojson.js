@@ -31,7 +31,7 @@ const stageConfigs = [
   {
     file: './public/gpx/t318833080_j4 - velococos.gpx',
     day: 4,
-    name: 'Étape 4 : Val-Bélair ➔ Québec (François de Laval)',
+    name: 'Étape 4 : Val-Bélair ➔ Québec (1937 av. du Monument)',
     distance: '22.6 km',
     color: '#ef4444'
   }

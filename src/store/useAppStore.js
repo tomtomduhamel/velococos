@@ -246,15 +246,15 @@ export const TRAIL_POIS = [
   },
   {
     id: 'poi-quebec-arrivee',
-    name: 'Québec - Croisement François de Laval',
+    name: 'Ligne d\'arrivée (1937 av. du Monument)',
     km: 'Arrivée J4',
     type: 'toilets',
     hasWater: true,
     hasToilets: true,
     hasRepair: false,
     hasParking: true,
-    coordinates: [46.846965, -71.205736],
-    description: 'Point d\'arrivée de l\'expédition ! Célébration finale et transports.'
+    coordinates: [46.849143, -71.208919],
+    description: '1937 avenue du Monument, G1E 3Y5, Québec, QC. Point d\'arrivée officiel de l\'expédition Vélococos ! Célébration finale.'
   }
 ];
 
@@ -306,15 +306,15 @@ export const INITIAL_STAGES = [
     id: 'stage-j4',
     day: 4,
     date: 'Lundi 7 Septembre 2026',
-    title: 'Val-Bélair ➔ Québec (François de Laval)',
+    title: 'Val-Bélair ➔ Québec (1937 av. du Monument)',
     distance: '22.6 km',
-    accommodation: 'Ligne d\'arrivée - Célébration',
-    bookingDetail: 'Croisement François de Laval / Corridor des Cheminots',
-    address: 'Québec, QC',
+    accommodation: 'Ligne d\'arrivée - Célébration Finale',
+    bookingDetail: '1937 avenue du Monument, G1E 3Y5, Québec',
+    address: '1937 avenue du Monument, G1E 3Y5, Québec, QC, Canada',
     phone: '',
-    coordinates: [46.846965, -71.205736],
+    coordinates: [46.849143, -71.208919],
     color: '#ef4444',
-    notes: 'Arrivée triomphale de l\'expédition Vélococos ! Photos de groupe et pique-nique final.'
+    notes: 'Arrivée triomphale de l\'expédition Vélococos au 1937 avenue du Monument ! Photos de groupe et célébration finale.'
   }
 ];
 
