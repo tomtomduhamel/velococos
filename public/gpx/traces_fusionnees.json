@@ -1,0 +1,90 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Étape 1 : Rivière-à-Pierre ➔ Lac Simon",
+        "day": 1,
+        "distance": "16 km",
+        "color": "#10b981"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-72.0002, 46.9928],
+          [-71.9885, 46.9892],
+          [-71.9741, 46.9854],
+          [-71.9567, 46.9811],
+          [-71.9388, 46.9760],
+          [-71.9215, 46.9702],
+          [-71.9052, 46.9658],
+          [-71.8845, 46.9601]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Étape 2 : Lac Simon ➔ Saint-Raymond",
+        "day": 2,
+        "distance": "19 km",
+        "color": "#3b82f6"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-71.8845, 46.9601],
+          [-71.8752, 46.9512],
+          [-71.8624, 46.9380],
+          [-71.8540, 46.9245],
+          [-71.8480, 46.9110],
+          [-71.8415, 46.8992],
+          [-71.8335, 46.8872]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Étape 3 : Saint-Raymond ➔ Val-Bélair",
+        "day": 3,
+        "distance": "34 km",
+        "color": "#f59e0b"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-71.8335, 46.8872],
+          [-71.7820, 46.8850],
+          [-71.7215, 46.8841],
+          [-71.6500, 46.8835],
+          [-71.5830, 46.8838],
+          [-71.5175, 46.8831],
+          [-71.4720, 46.8710],
+          [-71.4282, 46.8534]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Étape 4 : Val-Bélair ➔ Québec (François de Laval)",
+        "day": 4,
+        "distance": "22 km",
+        "color": "#ef4444"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-71.4282, 46.8534],
+          [-71.3910, 46.8480],
+          [-71.3540, 46.8415],
+          [-71.3150, 46.8340],
+          [-71.2780, 46.8270],
+          [-71.2421, 46.8202]
+        ]
+      }
+    }
+  ]
+}
