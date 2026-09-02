@@ -14,11 +14,11 @@ export default function BottomNav() {
   } = useAppStore();
 
   // Badges calculation
-  const pendingMateriel = materielList.filter((i) => !i.checked).length;
+  const pendingMateriel = (materielList || []).filter((i) => !i.checked).length;
   const pendingLinge =
-    lingePapaList.filter((i) => !i.checked).length +
-    lingeEnfantsList.filter((i) => !i.checked).length;
-  const pendingRefills = refillsList.filter((r) => !r.completed).length;
+    (lingePapaList || []).filter((i) => !i.checked).length +
+    (lingeEnfantsList || []).filter((i) => !i.checked).length;
+  const pendingRefills = (refillsList || []).filter((r) => !r.completed).length;
 
   const tabs = [
     {

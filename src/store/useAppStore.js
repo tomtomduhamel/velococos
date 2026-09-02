@@ -1,116 +1,152 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-// Données initiales par défaut selon le PRD
-const INITIAL_MATERIEL = [
-  { id: 'mat-1', title: 'Chariot de course + fixation vélo', category: 'Course & Chariot', checked: false },
-  { id: 'mat-2', title: 'Kit anti-crevaison, démonte-pneus & pompe', category: 'Course & Chariot', checked: false },
-  { id: 'mat-3', title: 'Chambre à air de rechange (vélo + chariot)', category: 'Course & Chariot', checked: false },
-  { id: 'mat-4', title: 'Multi-outils vélo complet + dérive-chaîne', category: 'Course & Chariot', checked: false },
-  { id: 'mat-5', title: 'Casques vélo (Papa + Enfants)', category: 'Course & Chariot', checked: false },
-  { id: 'mat-6', title: 'Tente légère de bivouac / camping', category: 'Bivouac', checked: false },
-  { id: 'mat-7', title: 'Matelas gonflables / auto-gonflants (x3)', category: 'Bivouac', checked: false },
-  { id: 'mat-8', title: 'Sacs de couchage adaptés aux nuits fraîches', category: 'Bivouac', checked: false },
-  { id: 'mat-9', title: 'Draps de sac / oreillers compressibles', category: 'Bivouac', checked: false },
-  { id: 'mat-10', title: 'Lampes frontales + piles / accus chargés', category: 'Bivouac', checked: false },
-  { id: 'mat-11', title: 'Réchaud léger + cartouche de gaz', category: 'Bivouac', checked: false },
-  { id: 'mat-12', title: 'Popote, couverts légers & gobelets', category: 'Bivouac', checked: false },
-  { id: 'mat-13', title: 'Gourdes d\'eau (capacité min 3L) + électrolytes', category: 'Bivouac', checked: false },
-  { id: 'mat-14', title: 'Trousse de premiers secours + pansements ampoules', category: 'Santé & Sécurité', checked: false },
-  { id: 'mat-15', title: 'Crème solaire indice 50 + répulsif moustiques', category: 'Santé & Sécurité', checked: false },
-  { id: 'mat-16', title: 'Médicaments usuels enfants & adulte', category: 'Santé & Sécurité', checked: false },
-  { id: 'mat-17', title: 'Batterie externe 20 000 mAh + câbles USB', category: 'Énergie & Navigation', checked: false },
-  { id: 'mat-18', title: 'Support téléphone étanche pour guidon', category: 'Énergie & Navigation', checked: false },
-  { id: 'mat-19', title: 'Sacs étanches / poubelles pour protection pluie', category: 'Divers', checked: false },
-  { id: 'mat-20', title: 'Briquet / allumettes étanches + couteau suisse', category: 'Divers', checked: false },
-  { id: 'mat-21', title: 'Tendeurs / sardines d\'ancrage pour plateforme bois (12x12)', category: 'Bivouac', checked: false },
-  { id: 'mat-22', title: 'Pastilles purification (Aquatabs) ou filtre à eau (zone nord non-potable)', category: 'Santé & Sécurité', checked: false },
-  { id: 'mat-23', title: 'Clochette / sifflet anti-ours pour le chariot', category: 'Course & Chariot', checked: false },
-  { id: 'mat-24', title: 'Lubrifiant chaîne spécial temps sec / poussière de pierre', category: 'Course & Chariot', checked: false },
-  { id: 'mat-25', title: 'Preuve de réservation camping sauvegardée (hors-ligne)', category: 'Divers', checked: false }
+// 1. MATÉRIEL - 31 articles exacts selon votre liste de préparation
+export const INITIAL_MATERIEL = [
+  { id: 'mat-1', title: 'Casques enfants', category: 'Vélo & Chariot', checked: false },
+  { id: 'mat-2', title: 'Rustines', category: 'Vélo & Chariot', checked: false },
+  { id: 'mat-3', title: 'Pompe vélo', category: 'Vélo & Chariot', checked: false },
+  { id: 'mat-4', title: 'Sangles', category: 'Vélo & Chariot', checked: false },
+  { id: 'mat-5', title: 'Sleeping (*3)', category: 'Bivouac & Dodo', checked: false },
+  { id: 'mat-6', title: 'Tapis de sol (*2)', category: 'Bivouac & Dodo', checked: false },
+  { id: 'mat-7', title: 'Tente', category: 'Bivouac & Dodo', checked: false },
+  { id: 'mat-8', title: 'Tendeurs (*6)', category: 'Bivouac & Dodo', checked: false },
+  { id: 'mat-9', title: 'Corde', category: 'Bivouac & Dodo', checked: false },
+  { id: 'mat-10', title: 'Gourdes eau (*3)', category: 'Bivouac & Dodo', checked: false },
+  { id: 'mat-11', title: 'Réchaud', category: 'Cuisine & Popote', checked: false },
+  { id: 'mat-12', title: 'Bouteille propane', category: 'Cuisine & Popote', checked: false },
+  { id: 'mat-13', title: 'Gamelle', category: 'Cuisine & Popote', checked: false },
+  { id: 'mat-14', title: 'Assiettes (*3)', category: 'Cuisine & Popote', checked: false },
+  { id: 'mat-15', title: 'Ustensiles', category: 'Cuisine & Popote', checked: false },
+  { id: 'mat-16', title: 'Anti-moustique (spray + spirales)', category: 'Hygiène & Santé', checked: false },
+  { id: 'mat-17', title: 'Filtre à eau', category: 'Hygiène & Santé', checked: false },
+  { id: 'mat-18', title: 'Papier toilette dans 1 ziploc (*2)', category: 'Hygiène & Santé', checked: false },
+  { id: 'mat-19', title: 'Ziplocs', category: 'Hygiène & Santé', checked: false },
+  { id: 'mat-20', title: 'Lingettes bébé', category: 'Hygiène & Santé', checked: false },
+  { id: 'mat-21', title: 'Crème solaire', category: 'Hygiène & Santé', checked: false },
+  { id: 'mat-22', title: 'Savon pour se laver', category: 'Hygiène & Santé', checked: false },
+  { id: 'mat-23', title: 'Produit vaisselle', category: 'Hygiène & Santé', checked: false },
+  { id: 'mat-24', title: 'Trousse de premiers soins', category: 'Hygiène & Santé', checked: false },
+  { id: 'mat-25', title: 'Batterie de rechange', category: 'Énergie & Divers', checked: false },
+  { id: 'mat-26', title: 'Fil de recharge cellulaire', category: 'Énergie & Divers', checked: false },
+  { id: 'mat-27', title: 'Panneau solaire', category: 'Énergie & Divers', checked: false },
+  { id: 'mat-28', title: 'Lampes frontales (*3)', category: 'Énergie & Divers', checked: false },
+  { id: 'mat-29', title: 'Liseuse', category: 'Énergie & Divers', checked: false },
+  { id: 'mat-30', title: 'Briquet', category: 'Énergie & Divers', checked: false },
+  { id: 'mat-31', title: 'Sacs poubelles (gros) (*5)', category: 'Énergie & Divers', checked: false }
 ];
 
-const INITIAL_LINGE_PAPA = [
-  { id: 'lp-1', title: 'Cuissards vélo / shorts de course (x2)', checked: false },
-  { id: 'lp-2', title: 'Maillots techniques respirants (x3)', checked: false },
-  { id: 'lp-3', title: 'Veste coupe-vent & imperméable légère', checked: false },
-  { id: 'lp-4', title: 'Sous-vêtements techniques de rechange (x3)', checked: false },
-  { id: 'lp-5', title: 'Paires de chaussettes anti-ampoules (x4)', checked: false },
-  { id: 'lp-6', title: 'Chaussures de course confortables', checked: false },
-  { id: 'lp-7', title: 'Sandales légères / tongs pour le campement', checked: false },
-  { id: 'lp-8', title: 'Pantalon léger de soirée / jogging', checked: false },
-  { id: 'lp-9', title: 'Polaire chaude pour la nuit', checked: false },
-  { id: 'lp-10', title: 'Casquette + lunettes de soleil sport', checked: false },
-  { id: 'lp-11', title: 'Buff / tour de cou', checked: false },
-  { id: 'lp-12', title: 'Serviette microfibre à séchage rapide', checked: false }
+// 2. LINGE PAPA - 12 articles exacts
+export const INITIAL_LINGE_PAPA = [
+  { id: 'lp-1', title: 'Casquette (*1)', checked: false },
+  { id: 'lp-2', title: 'Pantalons chauds (*1)', checked: false },
+  { id: 'lp-3', title: 'Short de course', checked: false },
+  { id: 'lp-4', title: 'Pull chaud (*1)', checked: false },
+  { id: 'lp-5', title: 'Manteau de pluie (*1)', checked: false },
+  { id: 'lp-6', title: 'Bobettes (*4)', checked: false },
+  { id: 'lp-7', title: 'Paires de chaussettes (*4)', checked: false },
+  { id: 'lp-8', title: 'T-shirt (*2)', checked: false },
+  { id: 'lp-9', title: 'T-shirt de course (*3)', checked: false },
+  { id: 'lp-10', title: 'Maillot de bain (*1)', checked: false },
+  { id: 'lp-11', title: 'Serviette (*1)', checked: false },
+  { id: 'lp-12', title: 'Tuque (*1)', checked: false }
 ];
 
-const INITIAL_LINGE_ENFANTS = [
-  { id: 'le-1', title: 'T-shirts respirants Gusto (x4)', checked: false },
-  { id: 'le-2', title: 'T-shirts respirants Jojo (x4)', checked: false },
-  { id: 'le-3', title: 'Shorts confortables Gusto (x3)', checked: false },
-  { id: 'le-4', title: 'Shorts confortables Jojo (x3)', checked: false },
-  { id: 'le-5', title: 'Pulls polaires chauds (x1 par enfant)', checked: false },
-  { id: 'le-6', title: 'Pantalons longs confortables pour la soirée (x2)', checked: false },
-  { id: 'le-7', title: 'Pyjamas chauds pour la tente (x2)', checked: false },
-  { id: 'le-8', title: 'Sous-vêtements & culottes de rechange (x5 par enfant)', checked: false },
-  { id: 'le-9', title: 'Chaussettes de rechange (x5 par enfant)', checked: false },
-  { id: 'le-10', title: 'K-ways / vestes de pluie étanches (x2)', checked: false },
-  { id: 'le-11', title: 'Baskets confortables + sandales d\'eau', checked: false },
-  { id: 'le-12', title: 'Casquettes soleil (x2)', checked: false },
-  { id: 'le-13', title: 'Doudous / couvertures réconfortantes', checked: false }
+// 3. LINGE ENFANTS (Jojo & Gusto - chacun) - 11 articles exacts
+export const INITIAL_LINGE_ENFANTS = [
+  { id: 'le-1', title: 'Casquette (*1)', checked: false },
+  { id: 'le-2', title: 'Pantalons chauds (*1)', checked: false },
+  { id: 'le-3', title: 'Pull chaud (*1)', checked: false },
+  { id: 'le-4', title: 'Manteau de pluie (*1)', checked: false },
+  { id: 'le-5', title: 'Bobettes (*4)', checked: false },
+  { id: 'le-6', title: 'Paires de chaussettes (*4)', checked: false },
+  { id: 'le-7', title: 'T-shirt (*3)', checked: false },
+  { id: 'le-8', title: 'Maillot de bain (*1)', checked: false },
+  { id: 'le-9', title: 'Serviette (*1 pour les 2)', checked: false },
+  { id: 'le-10', title: 'Tuques (*2)', checked: false },
+  { id: 'le-11', title: 'Gants (*2)', checked: false }
 ];
 
-const INITIAL_MENU = [
-  // J1
-  { id: 'm-j1-1', day: 'J1', type: 'Dîner', title: 'Sandwichs jambon sec, fromage & crudités', checked: false },
-  { id: 'm-j1-2', day: 'J1', type: 'Collation', title: 'Barres céréales, fruits secs & compotes', checked: false },
-  { id: 'm-j1-3', day: 'J1', type: 'Souper', title: 'Pâtes au thon & sauce tomate au réchaud (Lac Simon)', checked: false },
-  // J2
-  { id: 'm-j2-1', day: 'J2', type: 'Déjeuner', title: 'Gruau d\'avoine aux fruits, pain & beurre de cacahuète', checked: false },
-  { id: 'm-j2-2', day: 'J2', type: 'Collation', title: 'Pommes fraîches & biscuits énergétiques', checked: false },
-  { id: 'm-j2-3', day: 'J2', type: 'Dîner', title: 'Wraps dinde, fromage Babibel & carottes', checked: false },
-  { id: 'm-j2-4', day: 'J2', type: 'Souper', title: 'Ravitaillement Saint-Raymond : Burgers / Repas chaud local', checked: false },
-  // J3
-  { id: 'm-j3-1', day: 'J3', type: 'Déjeuner', title: 'Pancakes / pain doré & confiture + fruits', checked: false },
-  { id: 'm-j3-2', day: 'J3', type: 'Collation', title: 'Mélange randonneur (noix, canneberges, chocolat)', checked: false },
-  { id: 'm-j3-3', day: 'J3', type: 'Dîner', title: 'Pique-nique ombragé sur la piste (sandwichs & crudités)', checked: false },
-  { id: 'm-j3-4', day: 'J3', type: 'Souper', title: 'Festin Chez Annick et Vincent (Val-Bélair)', checked: false },
-  // J4
-  { id: 'm-j4-1', day: 'J4', type: 'Déjeuner', title: 'Grand déjeuner d\'arrivée Chez Annick et Vincent', checked: false },
-  { id: 'm-j4-2', day: 'J4', type: 'Collation', title: 'Fruits frais & berlingots de boisson énergisante', checked: false },
-  { id: 'm-j4-3', day: 'J4', type: 'Dîner', title: 'Célébration d\'arrivée à Québec (Croisement François de Laval)', checked: false }
+// 4. PROVISIONS DE DÉPART (16 articles exacts de la liste de courses)
+export const INITIAL_PROVISIONS = [
+  { id: 'prov-1', title: 'Pain sandwich (dîner J1 + dîner J2)', checked: false },
+  { id: 'prov-2', title: 'Babibel (dîner J1 + dîner J2)', checked: false },
+  { id: 'prov-3', title: 'Jambon sec (dîner J1 + dîner J2)', checked: false },
+  { id: 'prov-4', title: 'Sardines (dîner J1 + dîner J2)', checked: false },
+  { id: 'prov-5', title: 'Avocats (*5) (dîner J1 + dîner J2)', checked: false },
+  { id: 'prov-6', title: 'Tomates (*5) (dîner J1 + dîner J2)', checked: false },
+  { id: 'prov-7', title: 'Wrap (déjeuner J2 + collation J1 + collation J2)', checked: false },
+  { id: 'prov-8', title: 'Beurre de peanut (déjeuner J2)', checked: false },
+  { id: 'prov-9', title: 'Brisures de chocolat (déjeuner J2 + col. J1 + col. J2)', checked: false },
+  { id: 'prov-10', title: 'Noix (déjeuner J2 + collation J1 + collation J2)', checked: false },
+  { id: 'prov-11', title: 'Lait végétal (1L) (déjeuner J2)', checked: false },
+  { id: 'prov-12', title: 'Conserves (souper J1)', checked: false },
+  { id: 'prov-13', title: "Collation (poissons Annie's) (col. J1 + col. J2)", checked: false },
+  { id: 'prov-14', title: 'Barres tendres (collation J1 + collation J2)', checked: false },
+  { id: 'prov-15', title: 'Électrolytes', checked: false },
+  { id: 'prov-16', title: 'Riz préparé à réchauffer (*2) (souper J1)', checked: false }
 ];
 
-const INITIAL_REFILLS = [
+// 5. PLANNING DE CONSOMMATION PAR REPAS (J1 à J4)
+export const INITIAL_MENU = [
+  // J1 : 2 collations + 1 dîner + 1 souper
+  { id: 'm-j1-col1', day: 'J1', type: 'Collation', title: "Collation 1 : Wraps brisures de chocolat / Poissons Annie's", checked: false },
+  { id: 'm-j1-din', day: 'J1', type: 'Dîner', title: 'Dîner J1 : Pain sandwich, Babibel, Jambon sec, Sardines, Avocats & Tomates', checked: false },
+  { id: 'm-j1-col2', day: 'J1', type: 'Collation', title: 'Collation 2 : Barres tendres & Mélange de noix', checked: false },
+  { id: 'm-j1-soup', day: 'J1', type: 'Souper', title: 'Souper J1 : Conserves & Riz préparé à réchauffer (*2)', checked: false },
+
+  // J2 : 1 déjeuner + 2 collations + 1 dîner + 1 souper (Refill Saint-Raymond)
+  { id: 'm-j2-dej', day: 'J2', type: 'Déjeuner', title: 'Déjeuner J2 : Wrap, Beurre de peanut, Brisures de chocolat, Noix & Lait végétal 1L', checked: false },
+  { id: 'm-j2-col1', day: 'J2', type: 'Collation', title: "Collation 1 : Poissons Annie's & Barres tendres", checked: false },
+  { id: 'm-j2-din', day: 'J2', type: 'Dîner', title: 'Dîner J2 : Pain sandwich, Babibel, Jambon sec, Sardines, Avocats & Tomates', checked: false },
+  { id: 'm-j2-col2', day: 'J2', type: 'Collation', title: 'Collation 2 : Noix & Wrap chocolat', checked: false },
+  { id: 'm-j2-soup', day: 'J2', type: 'Souper', title: 'Souper J2 : Repas acheté lors du Refill Saint-Raymond', checked: false },
+
+  // J3 : 1 déjeuner + 2 collations + 1 dîner + 1 souper (Chez Annick et Vincent)
+  { id: 'm-j3-dej', day: 'J3', type: 'Déjeuner', title: 'Déjeuner J3 : Déjeuner acheté au Refill Saint-Raymond', checked: false },
+  { id: 'm-j3-col1', day: 'J3', type: 'Collation', title: 'Collation 1 J3 : Fruits & collations fraîches de Saint-Raymond', checked: false },
+  { id: 'm-j3-din', day: 'J3', type: 'Dîner', title: 'Dîner J3 : Pique-nique acheté à Saint-Raymond', checked: false },
+  { id: 'm-j3-col2', day: 'J3', type: 'Collation', title: 'Collation 2 J3 : Collation énergétique', checked: false },
+  { id: 'm-j3-soup', day: 'J3', type: 'Souper', title: 'Souper J3 : Festin Chez Annick et Vincent (Val-Bélair)', checked: false },
+
+  // J4 : 1 déjeuner + 2 collations + 1 dîner
+  { id: 'm-j4-dej', day: 'J4', type: 'Déjeuner', title: 'Déjeuner J4 : Déjeuner Chez Annick et Vincent / Refill Val-Bélair', checked: false },
+  { id: 'm-j4-col1', day: 'J4', type: 'Collation', title: 'Collation 1 J4 : Fruits & biscuits', checked: false },
+  { id: 'm-j4-din', day: 'J4', type: 'Dîner', title: 'Dîner J4 : Pique-nique final de fête à l’arrivée à Québec', checked: false },
+  { id: 'm-j4-col2', day: 'J4', type: 'Collation', title: 'Collation 2 J4 : Goûter de célébration d’arrivée', checked: false }
+];
+
+// 6. REFILLS EXACTS (Saint-Raymond & Val-Bélair)
+export const INITIAL_REFILLS = [
   {
     id: 'refill-j2',
     stage: 'J2 - Saint-Raymond',
-    location: 'Camping Plage Saint-Raymond / Supermarché local',
-    deadline: 'Fin d\'après-midi J2',
+    location: 'Camping Plage Saint-Raymond / Épiceries locales',
+    deadline: 'Fin d’après-midi J2',
     items: [
-      '1x Souper J2 (option barbecue ou prêt-à-manger)',
-      '2x Collations J3 (fruits frais, barres, compotes)',
-      '1x Dîner J3 (pain sandwich, fromage Babibel, jambon sec)',
-      '1x Déjeuner J3 (œufs ou gruau, lait, jus)'
+      '1x Souper (J2)',
+      '2x Collations (J3)',
+      '1x Dîner (J3)',
+      '1x Déjeuner (J3)'
     ],
     completed: false
   },
   {
     id: 'refill-j3',
     stage: 'J3 - Val-Bélair',
-    location: 'Épicerie Val-Bélair / Chez Annick et Vincent',
+    location: 'Commerces Val-Bélair / Chez Annick et Vincent',
     deadline: 'Soirée J3',
     items: [
-      '1x Souper J3 (repas convivial partagé)',
-      '2x Collations J4 (bananes, biscuits)',
-      '1x Dîner J4 (sandwichs de fête pour l\'arrivée finale)',
-      '1x Déjeuner J4 (bagels, fruits, café/chocolat chaud)'
+      '1x Souper (J3)',
+      '2x Collations (J4)',
+      '1x Dîner (J4)',
+      '1x Déjeuner (J4)'
     ],
     completed: false
   }
 ];
 
+// 7. POI OFFICIELS ALIGNÉS AVEC LE TRACÉ GPX
 export const TRAIL_POIS = [
   {
     id: 'poi-rap',
@@ -134,7 +170,7 @@ export const TRAIL_POIS = [
     hasRepair: false,
     hasParking: true,
     coordinates: [46.898764, -72.025730],
-    description: 'Accès Centre de Vacances et campings. Toilettes sèches. Attention : eau non-potable sur les sites de camping nord.'
+    description: 'Accès Centre de Vacances (Emplacement 60). Toilettes. Attention : eau non-potable sur les sites de camping nord.'
   },
   {
     id: 'poi-st-raymond',
@@ -146,7 +182,7 @@ export const TRAIL_POIS = [
     hasRepair: true,
     hasParking: true,
     coordinates: [46.872680, -71.800480],
-    description: 'Grand pôle de services : eau potable, toilettes, borne de réparation avec outils/pompe, commerces et grand Refill J2.'
+    description: 'Grand pôle de services : eau potable, toilettes, borne de réparation vélo, épiceries et grand Refill J2.'
   },
   {
     id: 'poi-lac-sergent',
@@ -206,7 +242,7 @@ export const TRAIL_POIS = [
     hasRepair: true,
     hasParking: false,
     coordinates: [46.851818, -71.441756],
-    description: 'Services urbains complets, épiceries et hébergement Chez Annick et Vincent.'
+    description: 'Services urbains complets, épiceries et étape Chez Annick et Vincent.'
   },
   {
     id: 'poi-quebec-arrivee',
@@ -222,6 +258,7 @@ export const TRAIL_POIS = [
   }
 ];
 
+// 8. HÉBERGEMENTS EXACTS (J1 à J4)
 export const INITIAL_STAGES = [
   {
     id: 'stage-j1',
@@ -229,9 +266,9 @@ export const INITIAL_STAGES = [
     date: 'Vendredi 4 Septembre 2026',
     title: 'Rivière-à-Pierre ➔ Lac Simon',
     distance: '21.6 km',
-    accommodation: 'Centre de Vacances Lac Simon',
-    bookingDetail: 'Emplacement #60',
-    address: '150 chemin du Lac Simon, Saint-Léonard-de-Portneuf, QC G0A 4A0',
+    accommodation: 'Centre Vacances Lac Simon',
+    bookingDetail: 'Emplacement 60',
+    address: '60 Chem. du Lac Simon, Saint-Léonard-de-Portneuf, QC G0A 4A0',
     phone: '(418) 337-6734',
     coordinates: [46.898764, -72.02573],
     color: '#10b981',
@@ -244,8 +281,8 @@ export const INITIAL_STAGES = [
     title: 'Lac Simon ➔ Saint-Raymond',
     distance: '21.6 km',
     accommodation: 'Camping Plage Saint-Raymond',
-    bookingDetail: 'Emplacement #C26',
-    address: '1070 Rang de la Sagamité, Saint-Raymond, QC G3L 4K8',
+    bookingDetail: 'Emplacement C26',
+    address: '615 Chem. de Bourg Louis, Saint-Raymond, QC G3L 4G3',
     phone: '(418) 337-2270',
     coordinates: [46.87268, -71.80048],
     color: '#3b82f6',
@@ -258,12 +295,12 @@ export const INITIAL_STAGES = [
     title: 'Saint-Raymond ➔ Val-Bélair',
     distance: '36.0 km',
     accommodation: 'Chez Annick et Vincent',
-    bookingDetail: 'Hébergement familial / Val-Bélair',
-    address: 'Val-Bélair, Québec, QC',
+    bookingDetail: 'Hébergement familial',
+    address: "1085 Rue de l'Esplanade, Québec, QC G3J 1G2",
     phone: 'Contact privé',
     coordinates: [46.851818, -71.441756],
     color: '#f59e0b',
-    notes: 'Étape la plus longue. Accueil chaleureux, lit confortable et recharge des batteries pour la dernière ligne droite !'
+    notes: 'Étape reine la plus longue. Accueil chaleureux, lit confortable et recharge des batteries pour la dernière ligne droite !'
   },
   {
     id: 'stage-j4',
@@ -290,7 +327,7 @@ export const useAppStore = create(
 
       // État Réseau & Synchronisation
       isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
-      syncStatus: 'idle', // 'idle' | 'syncing' | 'synced' | 'error' | 'local_only'
+      syncStatus: 'idle',
       lastSyncedAt: null,
       syncError: null,
       hasPendingChanges: false,
@@ -304,15 +341,16 @@ export const useAppStore = create(
           hasPendingChanges: syncStatus === 'synced' ? false : get().hasPendingChanges
         }),
 
-      // Données des modules
+      // Données calibrées sur votre liste exacte
       materielList: INITIAL_MATERIEL,
       lingePapaList: INITIAL_LINGE_PAPA,
       lingeEnfantsList: INITIAL_LINGE_ENFANTS,
+      provisionsList: INITIAL_PROVISIONS,
       menuList: INITIAL_MENU,
       refillsList: INITIAL_REFILLS,
       stages: INITIAL_STAGES,
 
-      // Actions de modification (Local-First immédiat avec flag pending sync)
+      // Actions de modification
       toggleItem: (listName, itemId) => {
         set((state) => {
           const targetList = state[listName];
@@ -373,6 +411,7 @@ export const useAppStore = create(
           if (listName === 'materielList') resetData = INITIAL_MATERIEL;
           else if (listName === 'lingePapaList') resetData = INITIAL_LINGE_PAPA;
           else if (listName === 'lingeEnfantsList') resetData = INITIAL_LINGE_ENFANTS;
+          else if (listName === 'provisionsList') resetData = INITIAL_PROVISIONS;
           else if (listName === 'menuList') resetData = INITIAL_MENU;
           else return state;
 
@@ -384,7 +423,7 @@ export const useAppStore = create(
         });
       },
 
-      // Export / Import pour synchronisation avec Supabase
+      // Export / Import Supabase
       exportSyncPayload: () => {
         const s = get();
         return {
@@ -392,6 +431,7 @@ export const useAppStore = create(
           materiel: s.materielList,
           linge_papa: s.lingePapaList,
           linge_enfants: s.lingeEnfantsList,
+          provisions: s.provisionsList,
           menu: s.menuList,
           refills: s.refillsList
         };
@@ -403,6 +443,7 @@ export const useAppStore = create(
           materielList: remoteState.materiel || state.materielList,
           lingePapaList: remoteState.linge_papa || state.lingePapaList,
           lingeEnfantsList: remoteState.linge_enfants || state.lingeEnfantsList,
+          provisionsList: remoteState.provisions || state.provisionsList,
           menuList: remoteState.menu || state.menuList,
           refillsList: remoteState.refills || state.refillsList,
           hasPendingChanges: false,
@@ -412,12 +453,13 @@ export const useAppStore = create(
       }
     }),
     {
-      name: 'velococos-local-first-storage',
+      name: 'velococos-storage-v4-exact',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         materielList: state.materielList,
         lingePapaList: state.lingePapaList,
         lingeEnfantsList: state.lingeEnfantsList,
+        provisionsList: state.provisionsList,
         menuList: state.menuList,
         refillsList: state.refillsList,
         lastSyncedAt: state.lastSyncedAt,

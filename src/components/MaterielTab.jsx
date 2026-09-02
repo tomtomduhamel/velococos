@@ -19,11 +19,11 @@ export default function MaterielTab() {
 
   const categories = [
     'ALL',
-    'Course & Chariot',
-    'Bivouac',
-    'Santé & Sécurité',
-    'Énergie & Navigation',
-    'Divers'
+    'Bivouac & Dodo',
+    'Cuisine & Popote',
+    'Vélo & Chariot',
+    'Hygiène & Santé',
+    'Énergie & Divers'
   ];
 
   const filteredItems =
