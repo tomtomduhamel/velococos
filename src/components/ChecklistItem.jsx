@@ -48,8 +48,8 @@ export default function ChecklistItem({ item, onToggle, onDelete, showCategory =
             e.stopPropagation();
             onDelete(item.id);
           }}
-          className="p-2 text-slate-500 hover:text-rose-400 active:text-rose-500 rounded-lg"
-          title="Supprimer"
+          className="p-2 text-slate-500 hover:text-rose-400 active:text-rose-500 hover:bg-rose-500/10 active:scale-95 rounded-xl transition-all flex-shrink-0 touch-target flex items-center justify-center ml-1"
+          title="Supprimer de la liste"
         >
           <Trash2 className="w-4 h-4" />
         </button>

@@ -168,7 +168,7 @@ export default function MaterielTab() {
             item={item}
             showCategory={selectedCategory === 'ALL'}
             onToggle={() => toggleItem('materielList', item.id)}
-            onDelete={item.id.startsWith('custom-') ? () => removeCustomItem('materielList', item.id) : null}
+            onDelete={() => removeCustomItem('materielList', item.id)}
           />
         ))}
       </div>

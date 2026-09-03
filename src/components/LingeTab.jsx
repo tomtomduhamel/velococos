@@ -175,7 +175,7 @@ export default function LingeTab() {
             key={item.id}
             item={item}
             onToggle={() => toggleItem(currentListName, item.id)}
-            onDelete={item.id.startsWith('custom-') ? () => removeCustomItem(currentListName, item.id) : null}
+            onDelete={() => removeCustomItem(currentListName, item.id)}
           />
         ))}
       </div>

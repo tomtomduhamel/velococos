@@ -186,7 +186,7 @@ export default function MiamTab() {
                 key={item.id}
                 item={item}
                 onToggle={() => toggleItem('provisionsList', item.id)}
-                onDelete={item.id.startsWith('custom-') ? () => removeCustomItem('provisionsList', item.id) : null}
+                onDelete={() => removeCustomItem('provisionsList', item.id)}
               />
             ))}
           </div>
@@ -380,7 +380,7 @@ export default function MiamTab() {
                   }}
                   showCategory={true}
                   onToggle={() => toggleItem('menuList', item.id)}
-                  onDelete={item.id.startsWith('custom-') ? () => removeCustomItem('menuList', item.id) : null}
+                  onDelete={() => removeCustomItem('menuList', item.id)}
                 />
               ))}
             </div>
