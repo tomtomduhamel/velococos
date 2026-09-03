@@ -626,12 +626,60 @@ export default function TrajetTab() {
       {/* Météo haute précision & alertes expédition (Pluie mm/h, Fortes chaleurs, Éphéméride) */}
       <WeatherWidget stage={activeStage} />
 
-      {/* Surface de roulement Vélopiste JCP */}
-      <div className="bg-slate-900/90 rounded-2xl p-3.5 border border-slate-800 text-xs text-slate-300 flex items-start space-x-2.5">
-        <span className="text-base flex-shrink-0 leading-none">🛤️</span>
-        <div>
-          <span className="font-bold text-white block">Surface de roulement (Km 68 à Km 0) :</span>
-          <span>Poussière de pierre fine compactée, très roulante pour chariot de course et pneus gravel. Devient plus meuble uniquement en cas de fortes averses prolongées.</span>
+      {/* Réseau cyclable & Surfaces de roulement (JCP + Corridor des Cheminots) */}
+      <div className="bg-slate-900/90 rounded-2xl p-4 border border-slate-800 space-y-3 text-xs text-slate-300 shadow-md">
+        <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+          <div className="flex items-center space-x-2">
+            <span className="text-base">🛤️</span>
+            <span className="font-black text-white text-sm">Surfaces & Réseau Cyclable (Route Verte 6)</span>
+          </div>
+          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            101.8 km connectés
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          {/* Section 1: JCP */}
+          <div className="bg-slate-800/70 p-3 rounded-xl border border-slate-700/70 space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="font-black text-white text-xs">1. Vélopiste Jacques-Cartier / Portneuf</span>
+              <span className="text-[10px] font-bold text-amber-300">Km 68 ➔ Km 0</span>
+            </div>
+            <p className="text-[11px] text-slate-400">
+              Rivière-à-Pierre ➔ Saint-Gabriel-de-Valcartier (68 km)
+            </p>
+            <p className="text-[11px] text-slate-300 leading-relaxed pt-1">
+              <strong className="text-amber-400">Poussière de pierre fine compactée</strong> sur ancienne voie ferrée (pente &lt; 2%). Très roulante avec le chariot. Devient légèrement plus souple uniquement en cas de fortes averses prolongées.
+            </p>
+          </div>
+
+          {/* Section 2: Corridor des Cheminots */}
+          <div className="bg-slate-800/70 p-3 rounded-xl border border-slate-700/70 space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="font-black text-white text-xs">2. Corridor des Cheminots (Québec)</span>
+              <span className="text-[10px] font-bold text-emerald-300">Km 0 ➔ Québec (23 km)</span>
+            </div>
+            <p className="text-[11px] text-slate-400">
+              Valcartier ➔ Val-Bélair ➔ Limoilou ➔ Beauport
+            </p>
+            <p className="text-[11px] text-slate-300 leading-relaxed pt-1">
+              <strong className="text-emerald-400">100% Asphalte lisse & descente continue (-220m)</strong>. Piste polyvalente ultra rapide pour le chariot, traversant 4 arrondissements (Laurentien, Haute-St-Charles, Rivières, Limoilou) jusqu'au Domaine de Maizerets et au 1937 av. du Monument.
+            </p>
+          </div>
+        </div>
+
+        {/* Info gestionnaire & services */}
+        <div className="flex flex-wrap items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-800/80 gap-1">
+          <span>Gestion : Vélopiste JCP (MRC Portneuf) & Ville de Québec (418 641-6412)</span>
+          <a
+            href="https://www.pleinairalacarte.com/pistes-cyclables/corridor-des-cheminots/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sky-400 hover:underline flex items-center gap-1 font-bold"
+          >
+            <span>Guide Plein Air À la Carte</span>
+            <ExternalLink className="w-3 h-3" />
+          </a>
         </div>
       </div>
     </div>

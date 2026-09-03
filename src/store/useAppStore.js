@@ -245,6 +245,32 @@ export const TRAIL_POIS = [
     description: 'Services urbains complets, épiceries et étape Chez Annick et Vincent.'
   },
   {
+    id: 'poi-parc-chanterelle',
+    name: 'Halte Parc de la Chanterelle (Cheminots)',
+    km: 'Km 15 (Cheminots) • J4',
+    type: 'water',
+    hasWater: true,
+    hasToilets: true,
+    hasRepair: false,
+    hasParking: true,
+    coordinates: [46.859267, -71.419104],
+    role: 'Halte détente famille J4',
+    description: 'Grand parc boisé le long du Corridor des Cheminots (La Haute-Saint-Charles) : point d\'eau potable, toilettes, tables ombragées et modules de jeux parfaits pour une pause avec Jojo et Gusto.'
+  },
+  {
+    id: 'poi-maizerets',
+    name: 'Domaine de Maizerets & Corridor du Littoral',
+    km: 'Km 2 (Cheminots) • J4',
+    type: 'repair',
+    hasWater: true,
+    hasToilets: true,
+    hasRepair: true,
+    hasParking: true,
+    coordinates: [46.840200, -71.222500],
+    role: 'Jonction historique vers Beauport',
+    description: 'Jonction officielle du Corridor des Cheminots avec le Corridor du Littoral dans La Cité-Limoilou. Site patrimonial d\'exception menant directement vers le 1937 avenue du Monument.'
+  },
+  {
     id: 'poi-quebec-arrivee',
     name: 'Ligne d\'arrivée (1937 av. du Monument)',
     km: 'Arrivée J4',
@@ -419,7 +445,7 @@ export const INITIAL_STAGES = [
     phone: 'Contact privé',
     coordinates: [46.851818, -71.441756],
     color: '#f59e0b',
-    notes: 'Étape reine la plus longue. Accueil chaleureux, lit confortable et recharge des batteries pour la dernière ligne droite !'
+    notes: 'Étape reine (36 km). Vallée de la Jacques-Cartier, traversée de Shannon, puis jonction au Km 0 (Valcartier) pour entrer sur l\'asphalte lisse du Corridor des Cheminots vers Val-Bélair. Accueil Chez Annick et Vincent.'
   },
   {
     id: 'stage-j4',
@@ -437,7 +463,7 @@ export const INITIAL_STAGES = [
     phone: '',
     coordinates: [46.849143, -71.208919],
     color: '#ef4444',
-    notes: 'Arrivée triomphale de l\'expédition Vélococos au 1937 avenue du Monument ! Photos de groupe et célébration finale.'
+    notes: '22.6 km sur le Corridor des Cheminots (Route Verte 6). 100% asphalté et très roulant pour le chariot, en pente descendante continue (-220m) à travers La Haute-Saint-Charles, Les Rivières et Limoilou jusqu\'au Domaine de Maizerets et l\'arrivée au 1937 avenue du Monument !'
   }
 ];
 
