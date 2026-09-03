@@ -39,6 +39,10 @@ export default function MiamTab() {
       ? menuList
       : menuList.filter((item) => item.day === selectedDay);
 
+  // Tri automatique pour les 2 vues : non cochés en haut, cochés en bas
+  const sortedProvisions = [...provisionsList].sort((a, b) => Number(a.checked) - Number(b.checked));
+  const sortedMenu = [...filteredMenu].sort((a, b) => Number(a.checked) - Number(b.checked));
+
   const handleAddCustom = (e) => {
     e.preventDefault();
     if (!newTitle.trim()) return;
@@ -181,9 +185,9 @@ export default function MiamTab() {
             )}
           </div>
 
-          {/* Provisions checklist */}
+          {/* Provisions checklist triée */}
           <div className="space-y-1">
-            {provisionsList.map((item) => (
+            {sortedProvisions.map((item) => (
               <ChecklistItem
                 key={item.id}
                 item={item}
@@ -373,9 +377,9 @@ export default function MiamTab() {
               ))}
             </div>
 
-            {/* Food items list */}
+            {/* Food items list triée */}
             <div className="space-y-1">
-              {filteredMenu.map((item) => (
+              {sortedMenu.map((item) => (
                 <ChecklistItem
                   key={item.id}
                   item={{

@@ -33,6 +33,9 @@ export default function MaterielTab() {
       ? materielList
       : materielList.filter((item) => item.category === selectedCategory);
 
+  // Tri automatique : non cochés en haut, cochés en bas
+  const sortedItems = [...filteredItems].sort((a, b) => Number(a.checked) - Number(b.checked));
+
   const checkedCount = materielList.filter((i) => i.checked).length;
   const totalCount = materielList.length;
   const progressPercent = Math.round((checkedCount / totalCount) * 100) || 0;
@@ -162,9 +165,9 @@ export default function MaterielTab() {
         </div>
       </div>
 
-      {/* Checklist */}
+      {/* Checklist triée */}
       <div className="space-y-1">
-        {filteredItems.map((item) => (
+        {sortedItems.map((item) => (
           <ChecklistItem
             key={item.id}
             item={item}

@@ -22,6 +22,9 @@ export default function LingeTab() {
   const currentList = activeSubTab === 'papa' ? lingePapaList : lingeEnfantsList;
   const currentListName = activeSubTab === 'papa' ? 'lingePapaList' : 'lingeEnfantsList';
 
+  // Tri automatique : non cochés en haut, cochés en bas
+  const sortedList = [...currentList].sort((a, b) => Number(a.checked) - Number(b.checked));
+
   const papaChecked = lingePapaList.filter((i) => i.checked).length;
   const papaTotal = lingePapaList.length;
   const papaPercent = Math.round((papaChecked / papaTotal) * 100) || 0;
@@ -170,9 +173,9 @@ export default function LingeTab() {
         )}
       </div>
 
-      {/* Items list */}
+      {/* Items list triée */}
       <div className="space-y-1">
-        {currentList.map((item) => (
+        {sortedList.map((item) => (
           <ChecklistItem
             key={item.id}
             item={item}
