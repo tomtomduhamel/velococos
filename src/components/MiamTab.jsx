@@ -13,6 +13,7 @@ export default function MiamTab() {
     addCustomItem,
     removeCustomItem,
     updateItemNote,
+    updateItemTitle,
     resetList
   } = useAppStore();
 
@@ -189,6 +190,7 @@ export default function MiamTab() {
                 onToggle={() => toggleItem('provisionsList', item.id)}
                 onDelete={() => removeCustomItem('provisionsList', item.id)}
                 onUpdateNote={(itemId, note) => updateItemNote('provisionsList', itemId, note)}
+                onUpdateTitle={(itemId, newTitle) => updateItemTitle('provisionsList', itemId, newTitle)}
               />
             ))}
           </div>
@@ -384,6 +386,7 @@ export default function MiamTab() {
                   onToggle={() => toggleItem('menuList', item.id)}
                   onDelete={() => removeCustomItem('menuList', item.id)}
                   onUpdateNote={(itemId, note) => updateItemNote('menuList', itemId, note)}
+                  onUpdateTitle={(itemId, newTitle) => updateItemTitle('menuList', itemId, newTitle)}
                 />
               ))}
             </div>

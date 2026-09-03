@@ -11,6 +11,7 @@ export default function LingeTab() {
     addCustomItem,
     removeCustomItem,
     updateItemNote,
+    updateItemTitle,
     resetList
   } = useAppStore();
 
@@ -178,6 +179,7 @@ export default function LingeTab() {
             onToggle={() => toggleItem(currentListName, item.id)}
             onDelete={() => removeCustomItem(currentListName, item.id)}
             onUpdateNote={(itemId, note) => updateItemNote(currentListName, itemId, note)}
+            onUpdateTitle={(itemId, newTitle) => updateItemTitle(currentListName, itemId, newTitle)}
           />
         ))}
       </div>

@@ -8,11 +8,34 @@ const QUICK_NOTE_SUGGESTIONS = [
   'Dans le chariot'
 ];
 
-export default function ChecklistItem({ item, onToggle, onDelete, onUpdateNote, showCategory = false }) {
+export default function ChecklistItem({
+  item,
+  onToggle,
+  onDelete,
+  onUpdateNote,
+  onUpdateTitle,
+  showCategory = false
+}) {
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [editTitleText, setEditTitleText] = useState(item.title || '');
+
   const [isEditingNote, setIsEditingNote] = useState(false);
   const [noteText, setNoteText] = useState(item.note || '');
 
   const isChecked = item.checked;
+
+  const handleSaveTitle = () => {
+    if (!editTitleText.trim()) return;
+    if (onUpdateTitle) {
+      onUpdateTitle(item.id, editTitleText.trim());
+    }
+    setIsEditingTitle(false);
+  };
+
+  const handleCancelTitle = () => {
+    setEditTitleText(item.title || '');
+    setIsEditingTitle(false);
+  };
 
   const handleSaveNote = (textToSave) => {
     const finalNote = typeof textToSave === 'string' ? textToSave : noteText;
@@ -33,7 +56,7 @@ export default function ChecklistItem({ item, onToggle, onDelete, onUpdateNote, 
   return (
     <div
       onClick={() => {
-        if (!isEditingNote) onToggle();
+        if (!isEditingNote && !isEditingTitle) onToggle();
       }}
       className={`group flex flex-col p-3.5 my-1.5 rounded-xl border transition-all duration-150 cursor-pointer active:scale-[0.99] select-none touch-target ${
         isChecked
@@ -55,14 +78,47 @@ export default function ChecklistItem({ item, onToggle, onDelete, onUpdateNote, 
             {isChecked && <Check className="w-5 h-5 stroke-[3]" />}
           </div>
 
-          <div className="flex flex-col min-w-0">
-            <span
-              className={`text-sm sm:text-base font-medium leading-snug break-words ${
-                isChecked ? 'line-through text-slate-500' : 'text-slate-100'
-              }`}
-            >
-              {item.title}
-            </span>
+          <div className="flex flex-col min-w-0 flex-1">
+            {/* Si édition du titre active */}
+            {isEditingTitle ? (
+              <div onClick={(e) => e.stopPropagation()} className="flex items-center space-x-1.5 w-full my-0.5">
+                <input
+                  type="text"
+                  value={editTitleText}
+                  onChange={(e) => setEditTitleText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleSaveTitle();
+                    if (e.key === 'Escape') handleCancelTitle();
+                  }}
+                  className="flex-1 bg-slate-950 border border-emerald-500 rounded-lg px-2.5 py-1 text-sm text-white focus:outline-none"
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  onClick={handleSaveTitle}
+                  className="p-1.5 bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 rounded-lg text-xs font-bold"
+                  title="Enregistrer"
+                >
+                  <CheckCheck className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCancelTitle}
+                  className="p-1.5 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-400 rounded-lg text-xs"
+                  title="Annuler"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <span
+                className={`text-sm sm:text-base font-medium leading-snug break-words ${
+                  isChecked ? 'line-through text-slate-500' : 'text-slate-100'
+                }`}
+              >
+                {item.title}
+              </span>
+            )}
 
             {/* Catégorie optionnelle */}
             {showCategory && item.category && (
@@ -90,8 +146,29 @@ export default function ChecklistItem({ item, onToggle, onDelete, onUpdateNote, 
           </div>
         </div>
 
-        {/* Boutons d'action (Note & Poubelle) */}
+        {/* Boutons d'action (Éditer Titre, Note & Poubelle) */}
         <div className="flex items-center space-x-0.5 flex-shrink-0">
+          {/* Bouton Modifier Titre */}
+          {onUpdateTitle && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setEditTitleText(item.title);
+                setIsEditingTitle(!isEditingTitle);
+              }}
+              className={`p-2 rounded-xl transition-all flex-shrink-0 touch-target flex items-center justify-center active:scale-95 ${
+                isEditingTitle
+                  ? 'text-emerald-400 bg-emerald-500/15'
+                  : 'text-slate-500 hover:text-slate-300 hover:bg-slate-700/50'
+              }`}
+              title="Modifier le nom de l'élément"
+            >
+              <Pencil className="w-3.5 h-3.5" />
+            </button>
+          )}
+
+          {/* Bouton Note */}
           {onUpdateNote && (
             <button
               type="button"
@@ -111,6 +188,7 @@ export default function ChecklistItem({ item, onToggle, onDelete, onUpdateNote, 
             </button>
           )}
 
+          {/* Bouton Supprimer */}
           {onDelete && (
             <button
               type="button"

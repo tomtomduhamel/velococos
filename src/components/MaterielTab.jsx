@@ -10,6 +10,7 @@ export default function MaterielTab() {
     addCustomItem,
     removeCustomItem,
     updateItemNote,
+    updateItemTitle,
     resetList
   } = useAppStore();
 
@@ -171,6 +172,7 @@ export default function MaterielTab() {
             onToggle={() => toggleItem('materielList', item.id)}
             onDelete={() => removeCustomItem('materielList', item.id)}
             onUpdateNote={(itemId, note) => updateItemNote('materielList', itemId, note)}
+            onUpdateTitle={(itemId, newTitle) => updateItemTitle('materielList', itemId, newTitle)}
           />
         ))}
       </div>
