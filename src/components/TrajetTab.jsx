@@ -61,8 +61,11 @@ const createPoiIcon = (type) => {
   if (type === 'water') {
     bgColor = '#06b6d4';
     emoji = '💧';
-  } else if (type === 'repair') {
+  } else if (type === 'grocery') {
     bgColor = '#f59e0b';
+    emoji = '🛒';
+  } else if (type === 'repair') {
+    bgColor = '#64748b';
     emoji = '🔧';
   } else if (type === 'toilets') {
     bgColor = '#8b5cf6';
@@ -164,8 +167,9 @@ export default function TrajetTab() {
   const [activePoiFilters, setActivePoiFilters] = useState({
     stages: true,
     water: true,
+    grocery: true,
     toilets: true,
-    repair: true
+    repair: false
   });
 
   const toggleFilter = (filterKey) => {
@@ -276,6 +280,7 @@ export default function TrajetTab() {
   // Filtrage des POIs à afficher
   const visiblePois = TRAIL_POIS.filter((poi) => {
     if (poi.type === 'water' && activePoiFilters.water) return true;
+    if (poi.type === 'grocery' && activePoiFilters.grocery) return true;
     if (poi.type === 'toilets' && activePoiFilters.toilets) return true;
     if (poi.type === 'repair' && activePoiFilters.repair) return true;
     return false;
@@ -334,8 +339,8 @@ export default function TrajetTab() {
         </div>
       </div>
 
-      {/* POI Filter Toggles Bar - Grid Responsive */}
-      <div className="grid grid-cols-4 gap-1.5 w-full">
+      {/* POI Filter Toggles Bar - Grid 5 colonnes Responsive */}
+      <div className="grid grid-cols-5 gap-1.5 w-full">
         <button
           type="button"
           onClick={() => toggleFilter('stages')}
@@ -346,7 +351,7 @@ export default function TrajetTab() {
           }`}
         >
           <span className="text-sm leading-none">⛺</span>
-          <span className="text-[11px] font-bold mt-1 tracking-tight leading-none">Étapes</span>
+          <span className="text-[10px] font-bold mt-1 tracking-tight leading-none truncate w-full">Étapes</span>
         </button>
 
         <button
@@ -359,7 +364,20 @@ export default function TrajetTab() {
           }`}
         >
           <span className="text-sm leading-none">💧</span>
-          <span className="text-[11px] font-bold mt-1 tracking-tight leading-none">Eau</span>
+          <span className="text-[10px] font-bold mt-1 tracking-tight leading-none truncate w-full">Eau</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => toggleFilter('grocery')}
+          className={`py-2 px-1 rounded-xl text-center border transition-all flex flex-col items-center justify-center active:scale-95 ${
+            activePoiFilters.grocery
+              ? 'bg-amber-500 text-slate-950 border-amber-400 font-extrabold shadow-sm'
+              : 'bg-slate-800/80 text-slate-400 border-slate-700'
+          }`}
+        >
+          <span className="text-sm leading-none">🛒</span>
+          <span className="text-[10px] font-bold mt-1 tracking-tight leading-none truncate w-full">Épiceries</span>
         </button>
 
         <button
@@ -372,7 +390,7 @@ export default function TrajetTab() {
           }`}
         >
           <span className="text-sm leading-none">🚻</span>
-          <span className="text-[11px] font-bold mt-1 tracking-tight leading-none">Toilettes</span>
+          <span className="text-[10px] font-bold mt-1 tracking-tight leading-none truncate w-full">Toilettes</span>
         </button>
 
         <button
@@ -380,12 +398,12 @@ export default function TrajetTab() {
           onClick={() => toggleFilter('repair')}
           className={`py-2 px-1 rounded-xl text-center border transition-all flex flex-col items-center justify-center active:scale-95 ${
             activePoiFilters.repair
-              ? 'bg-amber-500 text-slate-950 border-amber-400 font-extrabold shadow-sm'
+              ? 'bg-slate-200 text-slate-950 border-slate-300 font-extrabold shadow-sm'
               : 'bg-slate-800/80 text-slate-400 border-slate-700'
           }`}
         >
           <span className="text-sm leading-none">🔧</span>
-          <span className="text-[11px] font-bold mt-1 tracking-tight leading-none">Outils</span>
+          <span className="text-[10px] font-bold mt-1 tracking-tight leading-none truncate w-full">Outils</span>
         </button>
       </div>
 
@@ -455,18 +473,49 @@ export default function TrajetTab() {
               }}
             >
               <Popup>
-                <div className="p-1 text-slate-900 font-sans max-w-[200px]">
-                  <div className="font-extrabold text-sm text-slate-900">{poi.name}</div>
+                <div className="p-1 text-slate-900 font-sans max-w-[220px]">
+                  <div className="font-extrabold text-sm text-slate-900 flex items-center gap-1">
+                    {poi.type === 'grocery' && <span>🛒</span>}
+                    <span>{poi.name}</span>
+                  </div>
                   <div className="text-xs font-bold text-sky-700">{poi.km}</div>
+
+                  {poi.distanceFromTrail && (
+                    <div className="text-[11px] text-amber-800 font-semibold mt-0.5">
+                      📍 {poi.distanceFromTrail}
+                    </div>
+                  )}
+
+                  {poi.role && (
+                    <div className="text-[10px] bg-amber-100 border border-amber-300 text-amber-900 font-bold p-1 rounded mt-1 leading-tight">
+                      ⭐ {poi.role}
+                    </div>
+                  )}
+
                   <div className="flex flex-wrap gap-1 my-1">
+                    {poi.type === 'grocery' && <span className="bg-amber-100 text-amber-900 text-[10px] px-1.5 py-0.5 rounded font-bold">Épicerie</span>}
                     {poi.hasWater && <span className="bg-sky-100 text-sky-800 text-[10px] px-1.5 py-0.5 rounded font-bold">Eau</span>}
                     {poi.hasToilets && <span className="bg-purple-100 text-purple-800 text-[10px] px-1.5 py-0.5 rounded font-bold">Toilettes</span>}
                     {poi.hasRepair && <span className="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded font-bold">Outils</span>}
                     {poi.hasParking && <span className="bg-slate-100 text-slate-700 text-[10px] px-1.5 py-0.5 rounded font-bold">Parking</span>}
                   </div>
+
                   <div className="text-[11px] text-slate-600 leading-tight mt-1">
                     {poi.description}
                   </div>
+
+                  {poi.coordinates && (
+                    <div className="mt-2 pt-1 border-t border-slate-200">
+                      <a
+                        href={`https://www.google.com/maps/dir/?api=1&destination=${poi.coordinates[0]},${poi.coordinates[1]}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] font-bold text-sky-600 hover:text-sky-800 flex items-center gap-1"
+                      >
+                        <span>🧭 Itinéraire GPS</span>
+                      </a>
+                    </div>
+                  )}
                 </div>
               </Popup>
             </Marker>
