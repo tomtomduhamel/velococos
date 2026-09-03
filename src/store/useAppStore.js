@@ -405,6 +405,23 @@ export const useAppStore = create(
         });
       },
 
+      updateItemNote: (listName, itemId, note) => {
+        set((state) => {
+          const targetList = state[listName];
+          if (!targetList) return state;
+
+          const updatedList = targetList.map((item) =>
+            item.id === itemId ? { ...item, note: note ? note.trim() : '' } : item
+          );
+
+          return {
+            [listName]: updatedList,
+            hasPendingChanges: true,
+            syncStatus: 'idle'
+          };
+        });
+      },
+
       resetList: (listName) => {
         set((state) => {
           let resetData;
