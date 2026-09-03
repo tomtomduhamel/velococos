@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { useAppStore, INITIAL_STAGES, TRAIL_POIS } from '../store/useAppStore';
 import ElevationAndPaceCalculator from './ElevationAndPaceCalculator';
+import WeatherWidget from './WeatherWidget';
 
 // Icônes personnalisées pour les étapes (J1 à J4)
 const createStageIcon = (day, color) => {
@@ -573,38 +574,15 @@ export default function TrajetTab() {
       {/* Profil altimétrique & Calculateur d'allure de course chariot */}
       <ElevationAndPaceCalculator stage={activeStage} />
 
-      {/* État du sentier officiel & Météo prévisionnelle */}
-      <div className="bg-slate-900/95 rounded-2xl p-4 border border-slate-800 shadow-md space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Info className="w-5 h-5 text-sky-400" />
-            <h4 className="text-sm font-black text-white">État du Sentier & Météo Piste</h4>
-          </div>
-          <a
-            href="https://velopistejcp.com/la-piste/etat-du-sentier/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[11px] font-bold text-sky-400 hover:text-sky-300 flex items-center gap-1 bg-sky-500/10 px-2.5 py-1 rounded-lg border border-sky-500/30"
-          >
-            <span>Site officiel JCP</span>
-            <ExternalLink className="w-3 h-3" />
-          </a>
-        </div>
+      {/* Météo haute précision & alertes expédition (Pluie mm/h, Fortes chaleurs, Éphéméride) */}
+      <WeatherWidget stage={activeStage} />
 
-        <div className="grid grid-cols-2 gap-2 text-xs">
-          <div className="bg-slate-800/70 p-2.5 rounded-xl border border-slate-700">
-            <span className="text-slate-400 font-bold block mb-1">🌤️ Climat (4-7 Sept)</span>
-            <p className="text-slate-300 leading-snug">
-              Journée : <strong>18°C à 23°C</strong><br/>
-              Nuit (tente) : <strong>8°C à 12°C</strong>
-            </p>
-          </div>
-          <div className="bg-slate-800/70 p-2.5 rounded-xl border border-slate-700">
-            <span className="text-slate-400 font-bold block mb-1">🛤️ Surface de roulement</span>
-            <p className="text-slate-300 leading-snug">
-              Poussière de pierre fine compactée. Idéale pour chariot de course et pneus gravel.
-            </p>
-          </div>
+      {/* Surface de roulement Vélopiste JCP */}
+      <div className="bg-slate-900/90 rounded-2xl p-3.5 border border-slate-800 text-xs text-slate-300 flex items-start space-x-2.5">
+        <span className="text-base flex-shrink-0 leading-none">🛤️</span>
+        <div>
+          <span className="font-bold text-white block">Surface de roulement (Km 68 à Km 0) :</span>
+          <span>Poussière de pierre fine compactée, très roulante pour chariot de course et pneus gravel. Devient plus meuble uniquement en cas de fortes averses prolongées.</span>
         </div>
       </div>
     </div>
