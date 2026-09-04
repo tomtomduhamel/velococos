@@ -13,7 +13,10 @@ export default defineConfig({
       includeAssets: [
         'favicon.svg',
         'icon.svg',
-        'gpx/traces_fusionnees.json'
+        'gpx/traces_fusionnees.json',
+        'documents/reservation-camping-plage-st-raymond.pdf',
+        'documents/facture-lac-simon.pdf',
+        'documents/consignes-sejour-lac-simon.pdf'
       ],
       manifest: {
         name: 'Vélococos - Expédition Québec 2026',
@@ -39,8 +42,9 @@ export default defineConfig({
         ]
       },
       workbox: {
-        // Pré-cache tous les assets de l'application et traces JSON
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,webmanifest}'],
+        // Pré-cache tous les assets de l'application, traces JSON et preuves PDF
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,webmanifest,pdf}'],
+        maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         runtimeCaching: [
           {
             // Cache agressif des tuiles cartographiques OpenStreetMap

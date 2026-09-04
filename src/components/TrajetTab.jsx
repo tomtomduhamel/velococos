@@ -16,11 +16,13 @@ import {
   Sparkles,
   Info,
   ExternalLink,
-  Upload
+  Upload,
+  FileText
 } from 'lucide-react';
 import { useAppStore, INITIAL_STAGES, TRAIL_POIS } from '../store/useAppStore';
 import ElevationAndPaceCalculator from './ElevationAndPaceCalculator';
 import WeatherWidget from './WeatherWidget';
+import ReservationProofModal from './ReservationProofModal';
 
 // Icônes personnalisées pour les étapes (J1 à J4)
 const createStageIcon = (day, color) => {
@@ -162,6 +164,8 @@ export default function TrajetTab() {
   const [userLocation, setUserLocation] = useState(null);
   const [locating, setLocating] = useState(false);
   const [locError, setLocError] = useState(null);
+  const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
+  const [reservationModalDay, setReservationModalDay] = useState(1);
 
   // Filtres POI interactifs
   const [activePoiFilters, setActivePoiFilters] = useState({
@@ -557,6 +561,26 @@ export default function TrajetTab() {
         ))}
       </div>
 
+      {/* Bouton d'accès direct aux Preuves de Réservation Campings Hors-ligne */}
+      <button
+        type="button"
+        onClick={() => {
+          setReservationModalDay(activeStage.day <= 2 ? activeStage.day : 1);
+          setIsReservationModalOpen(true);
+        }}
+        className="w-full py-2.5 px-3.5 rounded-2xl bg-gradient-to-r from-emerald-950/90 via-slate-900 to-sky-950/90 border border-emerald-500/40 text-xs font-bold text-emerald-300 hover:text-white hover:border-emerald-400 flex items-center justify-between transition-all shadow-md active:scale-[0.99]"
+      >
+        <div className="flex items-center space-x-2">
+          <span className="p-1 rounded-lg bg-emerald-500/20 text-emerald-400 text-sm">⛺</span>
+          <span className="font-extrabold text-white">Preuves de réservation campings (J1 &amp; J2)</span>
+        </div>
+        <div className="flex items-center space-x-1.5 text-[10px]">
+          <span className="bg-emerald-900/80 text-emerald-300 px-1.5 py-0.5 rounded font-black border border-emerald-500/30">J1 Payé ✓</span>
+          <span className="bg-amber-950/80 text-amber-300 px-1.5 py-0.5 rounded font-black border border-amber-500/30">J2 Reste 31,04$</span>
+          <FileText className="w-3.5 h-3.5 ml-1 text-sky-400" />
+        </div>
+      </button>
+
       {/* Accommodation & Stage Detail Card */}
       <div className="bg-slate-900/95 rounded-2xl p-4 border border-slate-800 shadow-lg space-y-3">
         <div className="flex items-start justify-between">
@@ -581,27 +605,67 @@ export default function TrajetTab() {
         </div>
 
         {/* Hébergement Bloc Spécifique */}
-        <div className="bg-slate-800/80 rounded-xl p-3 border border-slate-700/80 space-y-2">
-          <div className="flex items-center space-x-2 text-white">
-            {activeStage.day <= 2 ? (
-              <Tent className="w-4 h-4 text-amber-400" />
-            ) : (
-              <Home className="w-4 h-4 text-sky-400" />
+        <div className="bg-slate-800/80 rounded-xl p-3.5 border border-slate-700/80 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2 text-white">
+              {activeStage.day <= 2 ? (
+                <Tent className="w-4 h-4 text-amber-400" />
+              ) : (
+                <Home className="w-4 h-4 text-sky-400" />
+              )}
+              <span className="font-bold text-sm">{activeStage.accommodation}</span>
+            </div>
+
+            {activeStage.booking && (
+              <button
+                type="button"
+                onClick={() => {
+                  setReservationModalDay(activeStage.day);
+                  setIsReservationModalOpen(true);
+                }}
+                className="inline-flex items-center space-x-1 text-[11px] font-bold px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30 transition shadow-sm active:scale-95"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>Preuve &amp; PDF</span>
+              </button>
             )}
-            <span className="font-bold text-sm">{activeStage.accommodation}</span>
           </div>
 
-          <div className="inline-block bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs px-2.5 py-1 rounded-lg font-mono font-bold">
-            {activeStage.bookingDetail}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="inline-block bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs px-2.5 py-1 rounded-lg font-mono font-bold">
+              {activeStage.bookingDetail}
+            </div>
+
+            {activeStage.booking && (
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                activeStage.booking.isFullyPaid
+                  ? 'bg-emerald-950 text-emerald-400 border-emerald-500/30'
+                  : 'bg-amber-950 text-amber-300 border-amber-500/40'
+              }`}>
+                {activeStage.booking.isFullyPaid ? 'Facture 100% Payée ✓' : `Solde restant : ${activeStage.booking.remainingBalance}`}
+              </span>
+            )}
           </div>
+
+          {activeStage.booking?.waterAlert && (
+            <div className="bg-red-950/50 border border-red-500/40 p-2.5 rounded-xl text-[11px] text-red-200 space-y-0.5">
+              <div className="font-bold flex items-center gap-1 text-red-300">
+                <span>⚠️</span>
+                <span>Avis Eau Non Potable (Lac Simon)</span>
+              </div>
+              <p className="opacity-90 leading-tight">
+                Blocs sanitaires pour douches/vaisselle, mais eau non potable. Eau embouteillée en vente à l'accueil.
+              </p>
+            </div>
+          )}
 
           <p className="text-xs text-slate-300 leading-relaxed">
             <span className="text-slate-400 font-semibold">Adresse : </span>
             {activeStage.address}
           </p>
 
-          {activeStage.phone && (
-            <div className="pt-1">
+          <div className="flex flex-wrap items-center justify-between pt-1 border-t border-slate-700/60 gap-2">
+            {activeStage.phone && (
               <a
                 href={`tel:${activeStage.phone.replace(/[^0-9]/g, '')}`}
                 className="inline-flex items-center space-x-1.5 text-xs text-sky-400 font-bold hover:underline"
@@ -609,8 +673,21 @@ export default function TrajetTab() {
                 <Phone className="w-3.5 h-3.5" />
                 <span>{activeStage.phone}</span>
               </a>
-            </div>
-          )}
+            )}
+
+            {activeStage.booking && (
+              <button
+                type="button"
+                onClick={() => {
+                  setReservationModalDay(activeStage.day);
+                  setIsReservationModalOpen(true);
+                }}
+                className="text-[11px] text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-1"
+              >
+                <span>📄 Voir confirmation officielle (Offline)</span>
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Note logistique */}
@@ -682,6 +759,14 @@ export default function TrajetTab() {
           </a>
         </div>
       </div>
+
+      {/* Modal des Preuves de Réservation et PDFs Hors-ligne */}
+      <ReservationProofModal
+        isOpen={isReservationModalOpen}
+        onClose={() => setIsReservationModalOpen(false)}
+        stages={INITIAL_STAGES}
+        initialStageDay={reservationModalDay}
+      />
     </div>
   );
 }

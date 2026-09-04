@@ -404,12 +404,54 @@ export const INITIAL_STAGES = [
     startEle: 215,
     endEle: 176,
     accommodation: 'Centre Vacances Lac Simon',
-    bookingDetail: 'Emplacement 60',
+    bookingDetail: 'Emplacement 60 (Sans services)',
     address: '60 Chem. du Lac Simon, Saint-Léonard-de-Portneuf, QC G0A 4A0',
-    phone: '(418) 337-6734',
+    phone: '418-337-1295 / (418) 337-6734',
     coordinates: [46.898764, -72.02573],
     color: '#10b981',
-    notes: 'Terrain ombragé proche du lac, point d\'eau et sanitaires au centre de vacances.'
+    notes: 'Terrain 60 ombragé proche du lac. Bâtiment d\'accueil ouvert 24h/24. ATTENTION : Eau du réseau non potable (travaux récents), eau embouteillée en vente à l\'accueil.',
+    booking: {
+      provider: 'Centre Vacances Lac Simon (CVLS)',
+      reference: '58-427441-7210',
+      date: '31 août 2026',
+      pitch: 'Emplacement 60',
+      category: 'Camping sans services - Terrains',
+      dates: 'Du 04/09/2026 au 05/09/2026',
+      checkIn: 'À partir de 13h00 (signaler arrivée à l\'accueil)',
+      checkOut: 'Avant 11h00',
+      totalPrice: '37,50 CAD',
+      paidAmount: '37,50 CAD (Mastercard 31/08/2026)',
+      remainingBalance: '0,00 CAD',
+      isFullyPaid: true,
+      clientName: 'Thomas Duhamel',
+      phone: '418-337-1295',
+      email: 'info@vacanceslacsimon.com',
+      receptionInfo: 'Accueil ouvert 24h/24 (sanitaires, trousse secours, téléphone public). Personnel sur place le vendredi jusqu\'à 20h00.',
+      waterAlert: 'EAU NON POTABLE : Travaux de réfection du réseau d\'eau en cours cet été. L\'eau est disponible pour la douche et la vaisselle, mais NON POTABLE. Eau embouteillée en vente à l\'accueil ou à apporter d\'avance.',
+      services: [
+        'Accès inclus à la Plage Eau Claire (bracelets remis valides le samedi)',
+        'Vente de bois de feu : 11$ le ballot ou 20$ pour 2 (livraison 16h et 19h)',
+        'Bloc sanitaire complet avec douches chaudes, toilettes et lavabos',
+        'Buanderie accessible 24h/24 au bâtiment d\'accueil',
+        'Location de jeux (washer, poches, pétanque)'
+      ],
+      documents: [
+        {
+          id: 'facture-cvls',
+          title: 'Facture Proforma officielle CVLS',
+          description: 'Facture acquittée 37,50 CAD (Réf: 58-427441-7210)',
+          url: '/documents/facture-lac-simon.pdf',
+          size: '14 Ko'
+        },
+        {
+          id: 'consignes-cvls',
+          title: 'Guide & Consignes de séjour CVLS',
+          description: 'Avis eau non potable, horaires 24h, plage Eau Claire, bois',
+          url: '/documents/consignes-sejour-lac-simon.pdf',
+          size: '197 Ko'
+        }
+      ]
+    }
   },
   {
     id: 'stage-j2',
@@ -422,12 +464,47 @@ export const INITIAL_STAGES = [
     startEle: 177,
     endEle: 175,
     accommodation: 'Camping Plage Saint-Raymond',
-    bookingDetail: 'Emplacement C26',
+    bookingDetail: 'Emplacement C26 (2 services)',
     address: '615 Chem. de Bourg Louis, Saint-Raymond, QC G3L 4G3',
-    phone: '(418) 337-2270',
+    phone: '(418) 337-4491 / (418) 337-2270',
     coordinates: [46.87268, -71.80048],
     color: '#3b82f6',
-    notes: 'Accès plage, douches chaudes, proximité avec les commerces de Saint-Raymond pour le grand Refill J2.'
+    notes: 'Emplacement C26 (eau + électricité 15A). Accès plage du lac Sept-Îles, douches chaudes. Solde restant à régler sur place : 31,04 $.',
+    booking: {
+      provider: 'Camping Plage Saint-Raymond (ReservPro)',
+      reference: 'Commande #3265',
+      date: '31 août 2026',
+      pitch: 'Emplacement C26',
+      category: 'Camping pour Tente - 2 services (Eau + Électricité 15A)',
+      dates: '04 septembre 2026 • 13:00 ➔ 05 septembre 2026 • 13:00',
+      checkIn: 'À partir de 13h00',
+      checkOut: 'Jusqu\'à 13h00',
+      occupants: '1 adulte + 2 enfants (Thomas, Jojo, Gusto)',
+      totalPrice: '62,09 $ (54,00$ + taxes TPS 2,70$ + TVQ 5,39$)',
+      paidAmount: '31,05 $ (Acompte payé en ligne)',
+      remainingBalance: '31,04 $ (À PAYER SUR PLACE)',
+      isFullyPaid: false,
+      clientName: 'Thomas Duhamel',
+      phone: '(418) 337-4491',
+      email: 'camping-plage-st-raymond@hotmail.com',
+      receptionInfo: 'Accueil camping pour règlement du solde de 31,04 $ et remise des accès terrain.',
+      services: [
+        'Emplacement pensé pour les campeurs en tente',
+        '2 services inclus : eau potable courante et prise électrique 15 ampères (idéal recharge)',
+        'Accès direct à la plage du camping',
+        'Douches chaudes et blocs sanitaires complets',
+        'Proximité immédiate des supermarchés Metro Plus et IGA pour le grand Refill J2'
+      ],
+      documents: [
+        {
+          id: 'confirmation-reservpro',
+          title: 'Confirmation ReservPro officielle',
+          description: 'Commande #3265 avec solde restant (31,04 $) et détails du terrain C26',
+          url: '/documents/reservation-camping-plage-st-raymond.pdf',
+          size: '207 Ko'
+        }
+      ]
+    }
   },
   {
     id: 'stage-j3',
