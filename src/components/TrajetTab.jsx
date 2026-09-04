@@ -17,7 +17,9 @@ import {
   Info,
   ExternalLink,
   Upload,
-  FileText
+  FileText,
+  Film,
+  Clock
 } from 'lucide-react';
 import { useAppStore, INITIAL_STAGES, TRAIL_POIS } from '../store/useAppStore';
 import ElevationAndPaceCalculator from './ElevationAndPaceCalculator';
@@ -72,6 +74,9 @@ const createPoiIcon = (type) => {
   } else if (type === 'toilets') {
     bgColor = '#8b5cf6';
     emoji = '🚻';
+  } else if (type === 'cinema') {
+    bgColor = '#d946ef';
+    emoji = '🎬';
   }
 
   return L.divIcon({
@@ -283,6 +288,7 @@ export default function TrajetTab() {
 
   // Filtrage des POIs à afficher
   const visiblePois = TRAIL_POIS.filter((poi) => {
+    if (poi.type === 'cinema') return true; // Toujours visible pour la surprise des enfants !
     if (poi.type === 'water' && activePoiFilters.water) return true;
     if (poi.type === 'grocery' && activePoiFilters.grocery) return true;
     if (poi.type === 'toilets' && activePoiFilters.toilets) return true;
@@ -497,6 +503,7 @@ export default function TrajetTab() {
                   )}
 
                   <div className="flex flex-wrap gap-1 my-1">
+                    {poi.type === 'cinema' && <span className="bg-fuchsia-100 text-fuchsia-900 text-[10px] px-1.5 py-0.5 rounded font-bold">🎬 Cinéma &amp; Bubble Tea</span>}
                     {poi.type === 'grocery' && <span className="bg-amber-100 text-amber-900 text-[10px] px-1.5 py-0.5 rounded font-bold">Épicerie</span>}
                     {poi.hasWater && <span className="bg-sky-100 text-sky-800 text-[10px] px-1.5 py-0.5 rounded font-bold">Eau</span>}
                     {poi.hasToilets && <span className="bg-purple-100 text-purple-800 text-[10px] px-1.5 py-0.5 rounded font-bold">Toilettes</span>}
@@ -508,8 +515,8 @@ export default function TrajetTab() {
                     {poi.description}
                   </div>
 
-                  {poi.coordinates && (
-                    <div className="mt-2 pt-1 border-t border-slate-200">
+                  <div className="mt-2 pt-1 border-t border-slate-200 flex items-center justify-between">
+                    {poi.coordinates && (
                       <a
                         href={`https://www.google.com/maps/dir/?api=1&destination=${poi.coordinates[0]},${poi.coordinates[1]}`}
                         target="_blank"
@@ -518,8 +525,18 @@ export default function TrajetTab() {
                       >
                         <span>🧭 Itinéraire GPS</span>
                       </a>
-                    </div>
-                  )}
+                    )}
+                    {poi.type === 'cinema' && (
+                      <a
+                        href="https://www.cinemaalouette.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] font-bold text-fuchsia-600 hover:text-fuchsia-800"
+                      >
+                        <span>cinemaalouette.com ↗</span>
+                      </a>
+                    )}
+                  </div>
                 </div>
               </Popup>
             </Marker>
@@ -696,6 +713,107 @@ export default function TrajetTab() {
           {activeStage.notes}
         </div>
       </div>
+
+      {/* Surprise Enfants : Cinéma Alouette (Étape J2 Saint-Raymond) */}
+      {activeStage.day === 2 && (
+        <div className="bg-gradient-to-br from-fuchsia-950/70 via-slate-900 to-purple-950/70 rounded-2xl p-4 border border-fuchsia-500/40 shadow-xl space-y-3 animate-fadeIn">
+          <div className="flex items-center justify-between border-b border-fuchsia-500/20 pb-2.5">
+            <div className="flex items-center space-x-2.5">
+              <div className="p-2 bg-fuchsia-500/20 text-fuchsia-300 rounded-xl border border-fuchsia-500/30">
+                <Film className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-black px-1.5 py-0.2 rounded bg-fuchsia-500 text-slate-950">SURPRISE</span>
+                  <h4 className="text-sm font-black text-white">Cinéma Alouette • Saint-Raymond</h4>
+                </div>
+                <p className="text-[11px] text-fuchsia-200/80">Pour Jojo (6 ans) &amp; Gusto (4 ans) • Si le timing le permet</p>
+              </div>
+            </div>
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-fuchsia-950 text-fuchsia-300 border border-fuchsia-500/30">
+              Séance 13h30
+            </span>
+          </div>
+
+          {/* Film à l'affiche */}
+          <div className="bg-slate-900/90 p-3 rounded-xl border border-slate-800 space-y-2">
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <div className="text-[10px] font-bold text-fuchsia-400 uppercase tracking-wider">À l'affiche (Semaine du 04 au 10 sept 2026)</div>
+                <div className="text-base font-black text-white">« Vincent : La prophétie des mers »</div>
+                <div className="text-xs text-slate-300 font-semibold flex items-center gap-2 mt-0.5">
+                  <span className="bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded text-[10px] font-bold">Général (Dès 3-4 ans)</span>
+                  <span>Durée : 1h31</span>
+                </div>
+              </div>
+              <div className="text-3xl">🐳</div>
+            </div>
+
+            <p className="text-[11px] text-slate-300 leading-relaxed">
+              Vincent, une jeune baleine à bosse, s'allie avec son gardien Walter (un rémora) et sa nouvelle amie Darya (une orque sourde courageuse) pour sauver les océans du Léviathan. <em>Un film d'animation tendre, héroïque et parfaitement adapté à Jojo et Gusto !</em>
+            </p>
+
+            {/* Friandises & Bubble Tea */}
+            <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-xs text-amber-300">
+              <span className="flex items-center gap-1.5">
+                <span>🧋</span>
+                <strong>Comptoir Bubble Tea &amp; Popcorn sur place !</strong>
+              </span>
+              <span className="text-slate-400 text-[10px]">Samedi 5 sept • 13h30</span>
+            </div>
+          </div>
+
+          {/* Simulation du timing avec le chariot */}
+          <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800 space-y-1.5 text-xs">
+            <div className="font-bold text-slate-200 flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-amber-400" />
+              <span>Simulation du timing (Étape 2 : 21.6 km)</span>
+            </div>
+            <p className="text-[11px] text-slate-400 leading-relaxed">
+              • <strong>Départ conseillé du Lac Simon :</strong> vers 08h30 - 08h45.<br />
+              • <strong>À 7.5 km/h + 30 min de pause :</strong> Arrivée à Saint-Raymond vers <strong>12h00 - 12h15</strong>.<br />
+              • <strong>Timing parfait :</strong> ~1h15 pour pique-niquer, s'installer tranquillement et faire la surprise pour <strong>13h30</strong> !
+            </p>
+          </div>
+
+          {/* Coordonnées & Actions */}
+          <div className="flex flex-wrap items-center justify-between pt-1 gap-2 text-xs">
+            <div className="text-[11px] text-slate-400">
+              📍 380, rue St-Joseph, Saint-Raymond (à 500m de la piste)
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <a
+                href="tel:4183372465"
+                className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-sky-400 font-bold text-[11px] flex items-center gap-1 border border-slate-700"
+              >
+                <Phone className="w-3 h-3" />
+                <span>418 337-2465</span>
+              </a>
+
+              <a
+                href="https://www.google.com/maps/dir/?api=1&destination=46.888500,-71.834000"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2.5 py-1 rounded-lg bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold text-[11px] flex items-center gap-1 shadow"
+              >
+                <Navigation className="w-3 h-3" />
+                <span>GPS Cinéma</span>
+              </a>
+
+              <a
+                href="https://www.cinemaalouette.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-[11px] flex items-center gap-1 border border-slate-700"
+              >
+                <ExternalLink className="w-3 h-3" />
+                <span>Site Web</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Profil altimétrique & Calculateur d'allure de course chariot */}
       <ElevationAndPaceCalculator stage={activeStage} />

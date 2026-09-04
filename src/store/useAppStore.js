@@ -271,6 +271,22 @@ export const TRAIL_POIS = [
     description: 'Jonction officielle du Corridor des Cheminots avec le Corridor du Littoral dans La Cité-Limoilou. Site patrimonial d\'exception menant directement vers le 1937 avenue du Monument.'
   },
   {
+    id: 'poi-cinema-alouette',
+    name: 'Cinéma Alouette (Surprise Enfants !)',
+    km: 'Km 31 (Saint-Raymond) • J2',
+    type: 'cinema',
+    hasWater: true,
+    hasToilets: true,
+    hasRepair: false,
+    hasParking: true,
+    coordinates: [46.888500, -71.834000],
+    address: '380, rue St-Joseph, Saint-Raymond, QC G3L 1J9',
+    phone: '418 337-2465',
+    distanceFromTrail: 'À 500m de la Vélopiste (centre-ville de Saint-Raymond)',
+    role: '🎬 Surprise Enfants J2 : Film "Vincent" à 13h30 & Bubble Tea',
+    description: 'Cinéma familial au cœur de Saint-Raymond ! Séance surprise pour Jojo (6 ans) et Gusto (4 ans) : film d\'animation "Vincent : La prophétie des mers" (1h31, Général) le Samedi 5 septembre à 13h30. Friandises et Bubble Tea.'
+  },
+  {
     id: 'poi-quebec-arrivee',
     name: 'Ligne d\'arrivée (1937 av. du Monument)',
     km: 'Arrivée J4',
